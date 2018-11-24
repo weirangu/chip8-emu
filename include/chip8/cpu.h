@@ -11,5 +11,5 @@ typedef struct chip8_cpu{
     unsigned char stack_pointer;
 } chip8_cpu;
 
-chip8_cpu* init_cpu(FILE* program);
+void init_cpu(chip8_cpu* program);
 #endif

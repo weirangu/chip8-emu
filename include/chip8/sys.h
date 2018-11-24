@@ -6,10 +6,14 @@
 
 typedef struct chip8_sys {
     unsigned char mem[4096];
-    chip8_cpu cpu;
-    chip8_timers timers;
+    chip8_cpu* cpu;
+    chip8_timers* timers;
     unsigned char graphics[2048];
     unsigned char input[0xF];
 } chip8_sys;
 
-#endif CHIP8_SYS_H
+chip8_sys* init_sys(FILE* program);
+
+void print_sys_mem(chip8_sys* sys);
+
+#endif

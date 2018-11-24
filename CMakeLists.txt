@@ -6,6 +6,8 @@ set(CMAKE_C_STANDARD 11)
 # source files
 list(APPEND SOURCES
     src/main.c
+    src/chip8/sys.c
+    src/chip8/cpu.c
 )
 
 project(${PROJECT_NAME} C)
