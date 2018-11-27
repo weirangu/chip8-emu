@@ -1,15 +1,15 @@
-#ifndef CHIP8_CPU_H
-#define CHIP8_CPU_H
+#ifndef CHIP8_REG_H
+#define CHIP8_REG_H
 
 #include <stdio.h>
 
-typedef struct chip8_cpu{
+typedef struct chip8_reg{
     unsigned char registers[0xF];
     unsigned short index;
     unsigned short pc;
     unsigned short stack[24];
     unsigned char stack_pointer;
-} chip8_cpu;
+} chip8_reg;
 
-void init_cpu(chip8_cpu* program);
+void init_reg(chip8_reg* program);
 #endif
