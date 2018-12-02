@@ -10,7 +10,6 @@ chip8_sys* init_sys(FILE* program){
     system->timers = malloc(sizeof(chip8_timers));
 
     init_reg(system->reg);
-    // init_timers(system->timers);
 
     // Load program into memory
     if (program){

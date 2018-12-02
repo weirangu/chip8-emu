@@ -6,4 +6,5 @@ typedef struct chip8_timers {
     unsigned char sound_timer;
 } chip8_timers;
 
+void init_timers(chip8_timers* timer);
 #endif
