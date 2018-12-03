@@ -18,67 +18,102 @@ void (*ops[0xF])(unsigned char sig, unsigned char insig) = {
     xF  // 0xF
 };
 
-void x0(unsigned char sig, unsigned char insig){
+void x0(unsigned char sig, unsigned char insig, chip_8_sys* sys){
     // TODO
+    // 0NNN
+    // 00E0
+    // 00EE
 }
 
-void x1(unsigned char sig, unsigned char insig){
+void x1(unsigned char sig, unsigned char insig, chip_8_sys* sys){
     // TODO
+    // 1NNN
 }
 
-void x2(unsigned char sig, unsigned char insig){
+void x2(unsigned char sig, unsigned char insig, chip_8_sys* sys){
     // TODO
+    // 2NNN
 }
 
-void x3(unsigned char sig, unsigned char insig){
+void x3(unsigned char sig, unsigned char insig, chip_8_sys* sys){
     // TODO
+    // 3XNN
 }
 
-void x4(unsigned char sig, unsigned char insig){
+void x4(unsigned char sig, unsigned char insig, chip_8_sys* sys){
     // TODO
+    // 4XNN
 }
 
-void x5(unsigned char sig, unsigned char insig){
+void x5(unsigned char sig, unsigned char insig, chip_8_sys* sys){
     // TODO
+    // 5XY0
 }
 
-void x6(unsigned char sig, unsigned char insig){
+void x6(unsigned char sig, unsigned char insig, chip_8_sys* sys){
     // TODO
+    // 6XNN
 }
 
-void x7(unsigned char sig, unsigned char insig){
+void x7(unsigned char sig, unsigned char insig, chip_8_sys* sys){
     // TODO
+    // 7XNN
 }
 
-void x8(unsigned char sig, unsigned char insig){
+void x8(unsigned char sig, unsigned char insig, chip_8_sys* sys){
     // TODO
+    // 8XY0
+    // 8XY1
+    // 8XY2
+    // 8XY3
+    // 8XY4
+    // 8XY5
+    // 8XY6
+    // 8XY7
+    // 8XYE
 }
 
-void x9(unsigned char sig, unsigned char insig){
+void x9(unsigned char sig, unsigned char insig, chip_8_sys* sys){
     // TODO
+    // 9XY0
 }
 
-void xA(unsigned char sig, unsigned char insig){
+void xA(unsigned char sig, unsigned char insig, chip_8_sys* sys){
     // TODO
+    // ANNN
 }
 
-void xB(unsigned char sig, unsigned char insig){
+void xB(unsigned char sig, unsigned char insig, chip_8_sys* sys){
     // TODO
+    // BNNN
 }
 
-void xC(unsigned char sig, unsigned char insig){
+void xC(unsigned char sig, unsigned char insig, chip_8_sys* sys){
     // TODO
+    // CXNN
 }
 
-void xD(unsigned char sig, unsigned char insig){
+void xD(unsigned char sig, unsigned char insig, chip_8_sys* sys){
     // TODO
+    // DXYN
 }
 
-void xE(unsigned char sig, unsigned char insig){
+void xE(unsigned char sig, unsigned char insig, chip_8_sys* sys){
     // TODO
+    // EX9E
+    // EXA1
 }
 
-void xF(unsigned char sig, unsigned char insig){
+void xF(unsigned char sig, unsigned char insig, chip_8_sys* sys){
     // TODO
+    // FX07
+    // FX0A
+    // FX15
+    // FX18
+    // FX1E
+    // FX29
+    // FX33
+    // FX55
+    // FX65
 }
 
