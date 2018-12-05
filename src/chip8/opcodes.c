@@ -79,8 +79,10 @@ void x9(unsigned char sig, unsigned char insig, chip_8_sys* sys){
 }
 
 void xA(unsigned char sig, unsigned char insig, chip_8_sys* sys){
-    // TODO
     // ANNN
+    short address = sig << 8 | insig;
+    address &= 0x0FFF; // We don't want the most significant nibble
+    sys->reg->index = sys->mem[address];
 }
 
 void xB(unsigned char sig, unsigned char insig, chip_8_sys* sys){
