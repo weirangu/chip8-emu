@@ -8,6 +8,7 @@ list(APPEND SOURCES
     src/main.c
     src/chip8/sys.c
     src/chip8/reg.c
+    src/chip8/opcodes.c
 )
 
 project(${PROJECT_NAME} C)

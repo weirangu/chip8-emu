@@ -1,6 +1,7 @@
 #ifndef CHIP8_SYS_H
 #define CHIP8_SYS_H
 
+#include <stdio.h>
 #include "chip8/reg.h"
 #include "chip8/timers.h"
 

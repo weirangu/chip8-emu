@@ -1,8 +1,6 @@
 #ifndef CHIP8_REG_H
 #define CHIP8_REG_H
 
-#include <stdio.h>
-
 typedef struct chip8_reg{
     unsigned char registers[0xF];
     unsigned short index;

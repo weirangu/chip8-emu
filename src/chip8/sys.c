@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <malloc.h>
 #include "chip8/sys.h"
 #include "chip8/reg.h"
 #include "chip8/timers.h"

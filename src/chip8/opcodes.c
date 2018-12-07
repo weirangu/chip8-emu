@@ -1,6 +1,7 @@
+#include "chip8/sys.h"
 #include "chip8/opcodes.h"
 
-void (*ops[0xF])(unsigned char sig, unsigned char insig) = {
+void (*ops[0x10])(unsigned char sig, unsigned char insig, chip8_sys* sys) = {
     x0, // 0x0
     x1, // 0x1
     x2, // 0x2
@@ -15,52 +16,55 @@ void (*ops[0xF])(unsigned char sig, unsigned char insig) = {
     xB, // 0xB
     xC, // 0xC
     xD, // 0xD
+    xE, // 0xE
     xF  // 0xF
 };
 
-void x0(unsigned char sig, unsigned char insig, chip_8_sys* sys){
+void x0(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // TODO
     // 0NNN
     // 00E0
     // 00EE
 }
 
-void x1(unsigned char sig, unsigned char insig, chip_8_sys* sys){
-    // TODO
+void x1(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // 1NNN
+    unsigned short mem_location = sig << 8 | insig;
+    mem_location &= 0x0FFF;
+    sys->reg->index = mem_location;
 }
 
-void x2(unsigned char sig, unsigned char insig, chip_8_sys* sys){
+void x2(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // TODO
     // 2NNN
 }
 
-void x3(unsigned char sig, unsigned char insig, chip_8_sys* sys){
+void x3(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // TODO
     // 3XNN
 }
 
-void x4(unsigned char sig, unsigned char insig, chip_8_sys* sys){
+void x4(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // TODO
     // 4XNN
 }
 
-void x5(unsigned char sig, unsigned char insig, chip_8_sys* sys){
+void x5(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // TODO
     // 5XY0
 }
 
-void x6(unsigned char sig, unsigned char insig, chip_8_sys* sys){
+void x6(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // TODO
     // 6XNN
 }
 
-void x7(unsigned char sig, unsigned char insig, chip_8_sys* sys){
+void x7(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // TODO
     // 7XNN
 }
 
-void x8(unsigned char sig, unsigned char insig, chip_8_sys* sys){
+void x8(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // TODO
     // 8XY0
     // 8XY1
@@ -73,40 +77,40 @@ void x8(unsigned char sig, unsigned char insig, chip_8_sys* sys){
     // 8XYE
 }
 
-void x9(unsigned char sig, unsigned char insig, chip_8_sys* sys){
+void x9(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // TODO
     // 9XY0
 }
 
-void xA(unsigned char sig, unsigned char insig, chip_8_sys* sys){
+void xA(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // ANNN
     short address = sig << 8 | insig;
     address &= 0x0FFF; // We don't want the most significant nibble
     sys->reg->index = sys->mem[address];
 }
 
-void xB(unsigned char sig, unsigned char insig, chip_8_sys* sys){
+void xB(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // TODO
     // BNNN
 }
 
-void xC(unsigned char sig, unsigned char insig, chip_8_sys* sys){
+void xC(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // TODO
     // CXNN
 }
 
-void xD(unsigned char sig, unsigned char insig, chip_8_sys* sys){
+void xD(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // TODO
     // DXYN
 }
 
-void xE(unsigned char sig, unsigned char insig, chip_8_sys* sys){
+void xE(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // TODO
     // EX9E
     // EXA1
 }
 
-void xF(unsigned char sig, unsigned char insig, chip_8_sys* sys){
+void xF(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // TODO
     // FX07
     // FX0A

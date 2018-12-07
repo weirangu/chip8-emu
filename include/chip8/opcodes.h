@@ -3,7 +3,7 @@
 
 // A list of pointers that hold functions that process opcodes
 // sig is the significant byte, insig is the insignificant byte
-void (*ops[0xF])(unsigned char sig, unsigned char insig);
+void (*ops[0x10])(unsigned char sig, unsigned char insig, chip8_sys *sys);
 
 void x0(unsigned char sig, unsigned char insig, chip8_sys* sys);
 void x1(unsigned char sig, unsigned char insig, chip8_sys* sys);
