@@ -62,8 +62,9 @@ void x5(unsigned char sig, unsigned char insig, chip8_sys* sys){
 }
 
 void x6(unsigned char sig, unsigned char insig, chip8_sys* sys){
-    // TODO
     // 6XNN
+    unsigned char reg = sig & 0x0F;
+    sys->reg->registers[reg] = insig;
 }
 
 void x7(unsigned char sig, unsigned char insig, chip8_sys* sys){
