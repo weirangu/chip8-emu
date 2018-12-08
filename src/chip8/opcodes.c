@@ -35,8 +35,15 @@ void x1(unsigned char sig, unsigned char insig, chip8_sys* sys){
 }
 
 void x2(unsigned char sig, unsigned char insig, chip8_sys* sys){
-    // TODO
     // 2NNN
+    unsigned short mem_location = sig << 8 | insig;
+    mem_location &= 0x0FFF;
+
+    // Stores current location in stack
+    sys->reg->stack[sys->reg->stack_pointer + 1] = sys->reg->index;
+    sys->reg->stack_pointer++;
+
+    sys->reg->index = mem_location;
 }
 
 void x3(unsigned char sig, unsigned char insig, chip8_sys* sys){
