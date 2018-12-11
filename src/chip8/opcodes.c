@@ -47,18 +47,34 @@ void x2(unsigned char sig, unsigned char insig, chip8_sys* sys){
 }
 
 void x3(unsigned char sig, unsigned char insig, chip8_sys* sys){
-    // TODO
     // 3XNN
+    unsigned char x = sig & 0x0F;
+
+    // Skip next instruction
+    if (sys->reg->registers[x] == insig) {
+        sys->reg->pc += 0x1;
+    }
 }
 
 void x4(unsigned char sig, unsigned char insig, chip8_sys* sys){
-    // TODO
     // 4XNN
+    unsigned char x = sig & 0x0F;
+
+    // Skip next instruction
+    if (sys->reg->registers[x] != insig) {
+        sys->reg->pc += 0x1;
+    }
 }
 
 void x5(unsigned char sig, unsigned char insig, chip8_sys* sys){
-    // TODO
     // 5XY0
+    unsigned char x = sig & 0x0F;
+    unsigned char y = insig & 0xF0;
+
+    // Skip next instruction
+    if (sys->reg->registers[x] == sys->reg->registers[y]) {
+        sys->reg->pc += 0x1;
+    }
 }
 
 void x6(unsigned char sig, unsigned char insig, chip8_sys* sys){
@@ -87,8 +103,14 @@ void x8(unsigned char sig, unsigned char insig, chip8_sys* sys){
 }
 
 void x9(unsigned char sig, unsigned char insig, chip8_sys* sys){
-    // TODO
     // 9XY0
+    unsigned char x = sig & 0x0F;
+    unsigned char y = insig & 0xF0;
+
+    // Skip next instruction
+    if (sys->reg->registers[x] != sys->reg->registers[y]) {
+        sys->reg->pc += 0x1;
+    }
 }
 
 void xA(unsigned char sig, unsigned char insig, chip8_sys* sys){
