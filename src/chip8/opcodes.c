@@ -1,23 +1,23 @@
 #include "chip8/sys.h"
 #include "chip8/opcodes.h"
 
-void (*ops[0x10])(unsigned char sig, unsigned char insig, chip8_sys* sys) = {
-    x0, // 0x0
-    x1, // 0x1
-    x2, // 0x2
-    x3, // 0x3
-    x4, // 0x4
-    x5, // 0x5
-    x6, // 0x6
-    x7, // 0x7
-    x8, // 0x8
-    x9, // 0x9
-    xA, // 0xA
-    xB, // 0xB
-    xC, // 0xC
-    xD, // 0xD
-    xE, // 0xE
-    xF  // 0xF
+void (* ops[0x10])(unsigned char sig, unsigned char insig, chip8_sys* sys) = {
+        x0, // 0x0
+        x1, // 0x1
+        x2, // 0x2
+        x3, // 0x3
+        x4, // 0x4
+        x5, // 0x5
+        x6, // 0x6
+        x7, // 0x7
+        x8, // 0x8
+        x9, // 0x9
+        xA, // 0xA
+        xB, // 0xB
+        xC, // 0xC
+        xD, // 0xD
+        xE, // 0xE
+        xF  // 0xF
 };
 
 void x0(unsigned char sig, unsigned char insig, chip8_sys* sys){
@@ -31,7 +31,7 @@ void x1(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // 1NNN
     unsigned short mem_location = sig << 8 | insig;
     mem_location &= 0x0FFF;
-    sys->reg->index = mem_location;
+    jump(mem_location, sys);
 }
 
 void x2(unsigned char sig, unsigned char insig, chip8_sys* sys){
@@ -43,7 +43,7 @@ void x2(unsigned char sig, unsigned char insig, chip8_sys* sys){
     sys->reg->stack[sys->reg->stack_pointer + 1] = sys->reg->index;
     sys->reg->stack_pointer++;
 
-    sys->reg->index = mem_location;
+    jump(mem_location, sys);
 }
 
 void x3(unsigned char sig, unsigned char insig, chip8_sys* sys){
@@ -68,8 +68,9 @@ void x6(unsigned char sig, unsigned char insig, chip8_sys* sys){
 }
 
 void x7(unsigned char sig, unsigned char insig, chip8_sys* sys){
-    // TODO
     // 7XNN
+    unsigned char reg = sig & 0x0F;
+    sys->reg->registers[reg] += insig;
 }
 
 void x8(unsigned char sig, unsigned char insig, chip8_sys* sys){
@@ -131,3 +132,6 @@ void xF(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // FX65
 }
 
+void jump(unsigned short mem_location, const chip8_sys* sys){
+    sys->reg->pc = mem_location;
+}

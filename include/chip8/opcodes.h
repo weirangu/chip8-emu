@@ -21,4 +21,6 @@ void xC(unsigned char sig, unsigned char insig, chip8_sys* sys);
 void xD(unsigned char sig, unsigned char insig, chip8_sys* sys);
 void xE(unsigned char sig, unsigned char insig, chip8_sys* sys);
 void xF(unsigned char sig, unsigned char insig, chip8_sys* sys);
+
+void jump(unsigned short mem_location, const chip8_sys* sys);
 #endif
