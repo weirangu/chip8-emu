@@ -121,8 +121,10 @@ void xA(unsigned char sig, unsigned char insig, chip8_sys* sys){
 }
 
 void xB(unsigned char sig, unsigned char insig, chip8_sys* sys){
-    // TODO
     // BNNN
+    unsigned short mem_location = sig << 8 | insig + sys->reg->registers[0x0];
+    mem_location &= 0x0FFF;
+    jump(mem_location, sys);
 }
 
 void xC(unsigned char sig, unsigned char insig, chip8_sys* sys){
