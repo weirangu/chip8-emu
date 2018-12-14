@@ -22,9 +22,19 @@ void (* ops[0x10])(unsigned char sig, unsigned char insig, chip8_sys* sys) = {
 
 void x0(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // TODO
+    if ((sig & 0x0F) == 0x00) {
+        if (insig == 0xE0) {
+            // 00E0
+        }
+        else {
+            //00EE
+            unsigned char location = --sys->reg->stack_pointer;
+            jump(sys->reg->stack[location], sys);
+        }
+
+    }
     // 0NNN
-    // 00E0
-    // 00EE
+
 }
 
 void x1(unsigned char sig, unsigned char insig, chip8_sys* sys){
