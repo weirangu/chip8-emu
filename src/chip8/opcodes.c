@@ -100,7 +100,29 @@ void x7(unsigned char sig, unsigned char insig, chip8_sys* sys){
 }
 
 void x8(unsigned char sig, unsigned char insig, chip8_sys* sys){
-    // TODO
+    unsigned char op = insig & 0x0F; // Gives us the last nibble
+    unsigned char x = sig & 0x0F;
+    unsigned char y = insig & 0xF0;
+    switch (op){
+        case 0x00:
+            sys->reg->registers[x] = sys->reg->registers[y];
+            break;
+        case 0x01:
+            sys->reg->registers[x] |= sys->reg->registers[y];
+            break;
+        case 0x02:
+            sys->reg->registers[x] &= sys->reg->registers[y];
+            break;
+        case 0x03:
+            sys->reg->registers[x] ^= sys->reg->registers[y];
+            break;
+        case 0x04:
+        case 0x05:
+        case 0x06:
+        case 0x07:
+        case 0x0E:
+        break;
+    }
     // 8XY0
     // 8XY1
     // 8XY2
