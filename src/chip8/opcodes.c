@@ -29,7 +29,7 @@ void x0(unsigned char sig, unsigned char insig, chip8_sys* sys){
         else {
             //00EE
             unsigned char location = --sys->reg->stack_pointer;
-            jump(sys->reg->stack[location], sys);
+            jump(sys->reg->stack[location], sys->reg);
         }
 
     }
@@ -41,7 +41,7 @@ void x1(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // 1NNN
     unsigned short mem_location = sig << 8 | insig;
     mem_location &= 0x0FFF;
-    jump(mem_location, sys);
+    jump(mem_location, sys->reg);
 }
 
 void x2(unsigned char sig, unsigned char insig, chip8_sys* sys){
@@ -53,7 +53,7 @@ void x2(unsigned char sig, unsigned char insig, chip8_sys* sys){
     sys->reg->stack[sys->reg->stack_pointer + 1] = sys->reg->index;
     sys->reg->stack_pointer++;
 
-    jump(mem_location, sys);
+    jump(mem_location, sys->reg);
 }
 
 void x3(unsigned char sig, unsigned char insig, chip8_sys* sys){
@@ -134,7 +134,7 @@ void xB(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // BNNN
     unsigned short mem_location = sig << 8 | insig + sys->reg->registers[0x0];
     mem_location &= 0x0FFF;
-    jump(mem_location, sys);
+    jump(mem_location, sys->reg);
 }
 
 void xC(unsigned char sig, unsigned char insig, chip8_sys* sys){
@@ -164,8 +164,4 @@ void xF(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // FX33
     // FX55
     // FX65
-}
-
-void jump(unsigned short mem_location, const chip8_sys* sys){
-    sys->reg->pc = mem_location;
 }

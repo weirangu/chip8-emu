@@ -10,4 +10,7 @@ typedef struct chip8_reg{
 } chip8_reg;
 
 void init_reg(chip8_reg* program);
+
+// Changes pc to mem_location. Does not affect stack.
+void jump(unsigned short mem_location, chip8_reg* reg);
 #endif
