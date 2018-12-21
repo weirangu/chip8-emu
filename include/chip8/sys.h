@@ -10,11 +10,14 @@ typedef struct chip8_sys {
     chip8_reg* reg;
     chip8_timers* timers;
     unsigned char graphics[2048];
-    unsigned char input[0xF];
+    unsigned char input[0x10];
 } chip8_sys;
 
+// Initializes the system with a program.
+// FILE* program is the CHIP8 ROM that we should load.
 chip8_sys* init_sys(FILE* program);
 
+// Prints system memory.
 void print_sys_mem(chip8_sys* sys);
 
 #endif

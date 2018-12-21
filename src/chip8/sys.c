@@ -4,7 +4,6 @@
 #include "chip8/reg.h"
 #include "chip8/timers.h"
 
-// FILE* program is the CHIP8 ROM that we should load.
 chip8_sys* init_sys(FILE* program){
     chip8_sys* system = malloc(sizeof(chip8_sys));
     system->reg = malloc(sizeof(chip8_reg));
