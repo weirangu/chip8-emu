@@ -181,14 +181,35 @@ void xE(unsigned char sig, unsigned char insig, chip8_sys* sys){
 }
 
 void xF(unsigned char sig, unsigned char insig, chip8_sys* sys){
-    // TODO
-    // FX07
-    // FX0A
-    // FX15
-    // FX18
-    // FX1E
-    // FX29
-    // FX33
-    // FX55
-    // FX65
+    unsigned char x = sig & 0x0F;
+
+    switch (insig){
+        case 0x07:
+            sys->reg->registers[x] = sys->timers->delay_timer;
+            break;
+        case 0x0A:
+            //TODO
+            break;
+        case 0x15:
+            sys->timers->delay_timer = sys->reg->registers[x];
+            break;
+        case 0x18:
+            sys->timers->sound_timer = sys->reg->registers[x];
+            break;
+        case 0x1E:
+            sys->reg->index += sys->reg->registers[x];
+            break;
+        case 0x29:
+            //TODO
+            break;
+        case 0x33:
+            //TODO
+            break;
+        case 0x55:
+            //TODO
+            break;
+        case 0x65:
+            //TODO
+            break;
+    }
 }
