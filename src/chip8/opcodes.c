@@ -103,35 +103,40 @@ void x8(unsigned char sig, unsigned char insig, chip8_sys* sys){
     unsigned char op = insig & 0x0F; // Gives us the last nibble
     unsigned char x = sig & 0x0F;
     unsigned char y = insig & 0xF0;
+
+    unsigned char* reg = sys->reg->registers;
+
     switch (op){
         case 0x00:
-            sys->reg->registers[x] = sys->reg->registers[y];
+            *(reg + x) = *(reg + y);
             break;
         case 0x01:
-            sys->reg->registers[x] |= sys->reg->registers[y];
+            *(reg + x) |= *(reg + y);
             break;
         case 0x02:
-            sys->reg->registers[x] &= sys->reg->registers[y];
+            *(reg + x) &= *(reg + y);
             break;
         case 0x03:
-            sys->reg->registers[x] ^= sys->reg->registers[y];
+            *(reg + x) ^= *(reg + y);
             break;
         case 0x04:
+            *(reg + x) = sum(*(reg + x), *(reg + y), reg + 0xF);
+            break;
         case 0x05:
+            *(reg + x) = subtract(*(reg + x), *(reg + y), reg + 0xF);
+            break;
         case 0x06:
+            *(reg + 0xF) = *(reg + x) & 0x01;
+            *(reg + x) >>= 1;
+            break;
         case 0x07:
+            *(reg + x) = subtract(*(reg + y), *(reg + x), reg + 0xF);
+            break;
         case 0x0E:
-        break;
+            *(reg + 0xF) = *(reg + x) & 0x80;
+            *(reg + x) <<= 1;
+            break;
     }
-    // 8XY0
-    // 8XY1
-    // 8XY2
-    // 8XY3
-    // 8XY4
-    // 8XY5
-    // 8XY6
-    // 8XY7
-    // 8XYE
 }
 
 void x9(unsigned char sig, unsigned char insig, chip8_sys* sys){
