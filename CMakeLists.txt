@@ -14,5 +14,9 @@ list(APPEND SOURCES
 project(${PROJECT_NAME} C)
 add_executable(${PROJECT_NAME} ${SOURCES})
 
+set(CURSES_NEED_NCURSES TRUE)
+find_package(Curses REQUIRED)
+
 # include folder
 target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include")
+target_link_libraries(${PROJECT_NAME} ${CURSES_LIBRARIES})
