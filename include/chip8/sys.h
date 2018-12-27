@@ -17,7 +17,7 @@ typedef struct chip8_sys {
 // FILE* program is the CHIP8 ROM that we should load.
 chip8_sys* init_sys(FILE* program);
 
-// Prints system memory.
+// Prints system memory to printw (needs ncurses). Does not call refresh.
 void print_sys_mem(chip8_sys* sys);
 
 #endif

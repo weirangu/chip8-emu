@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <malloc.h>
+#include <ncurses.h>
 #include "chip8/sys.h"
 #include "chip8/reg.h"
 #include "chip8/timers.h"
@@ -27,6 +28,6 @@ chip8_sys* init_sys(FILE* program){
 
 void print_sys_mem(chip8_sys* sys){
     for (int i = 0; i < 4096; i++){
-        printf("%x ", sys->mem[i]);
+        printw("%x ", sys->mem[i]);
     }
 }

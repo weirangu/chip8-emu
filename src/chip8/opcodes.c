@@ -1,3 +1,4 @@
+#include <ncurses.h>
 #include "chip8/sys.h"
 #include "chip8/opcodes.h"
 
@@ -25,16 +26,22 @@ void x0(unsigned char sig, unsigned char insig, chip8_sys* sys){
     if ((sig & 0x0F) == 0x00) {
         if (insig == 0xE0) {
             // 00E0
+            for (int i = 0; i < 8; i++){
+                for (int j = 0; j < 4; j++) {
+                    sys->graphics[i][j] = 0;
+        }
+            }
         }
         else {
             //00EE
             unsigned char location = --sys->reg->stack_pointer;
             jump(sys->reg->stack[location], sys->reg);
         }
-
     }
+    else {
     // 0NNN
-
+        printw("0NNN Not implemented!");
+}
 }
 
 void x1(unsigned char sig, unsigned char insig, chip8_sys* sys){
@@ -79,7 +86,7 @@ void x4(unsigned char sig, unsigned char insig, chip8_sys* sys){
 void x5(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // 5XY0
     unsigned char x = sig & 0x0F;
-    unsigned char y = insig & 0xF0;
+    unsigned char y = (insig & 0xF0) >> 4;
 
     // Skip next instruction
     if (sys->reg->registers[x] == sys->reg->registers[y]) {
@@ -102,7 +109,7 @@ void x7(unsigned char sig, unsigned char insig, chip8_sys* sys){
 void x8(unsigned char sig, unsigned char insig, chip8_sys* sys){
     unsigned char op = insig & 0x0F; // Gives us the last nibble
     unsigned char x = sig & 0x0F;
-    unsigned char y = insig & 0xF0;
+    unsigned char y = (insig & 0xF0) >> 4;
 
     unsigned char* reg = sys->reg->registers;
 
@@ -142,7 +149,7 @@ void x8(unsigned char sig, unsigned char insig, chip8_sys* sys){
 void x9(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // 9XY0
     unsigned char x = sig & 0x0F;
-    unsigned char y = insig & 0xF0;
+    unsigned char y = (insig & 0xF0) >> 4;
 
     // Skip next instruction
     if (sys->reg->registers[x] != sys->reg->registers[y]) {
