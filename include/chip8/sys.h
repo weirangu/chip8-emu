@@ -9,7 +9,7 @@ typedef struct chip8_sys {
     unsigned char mem[4096];
     chip8_reg* reg;
     chip8_timers* timers;
-    unsigned char graphics[2048];
+    unsigned char graphics[8][4];
     unsigned char input[0x10];
 } chip8_sys;
 

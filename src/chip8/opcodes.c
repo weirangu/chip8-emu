@@ -29,7 +29,7 @@ void x0(unsigned char sig, unsigned char insig, chip8_sys* sys){
             for (int i = 0; i < 8; i++){
                 for (int j = 0; j < 4; j++) {
                     sys->graphics[i][j] = 0;
-        }
+                }
             }
         }
         else {
@@ -39,9 +39,9 @@ void x0(unsigned char sig, unsigned char insig, chip8_sys* sys){
         }
     }
     else {
-    // 0NNN
+        // 0NNN
         printw("0NNN Not implemented!");
-}
+    }
 }
 
 void x1(unsigned char sig, unsigned char insig, chip8_sys* sys){
@@ -177,8 +177,22 @@ void xC(unsigned char sig, unsigned char insig, chip8_sys* sys){
 }
 
 void xD(unsigned char sig, unsigned char insig, chip8_sys* sys){
-    // TODO
     // DXYN
+    unsigned char x = sig & 0x0F; 
+    unsigned char y = (insig & 0xF0) >> 4;
+    unsigned char n = insig & 0x0F;
+    unsigned char index = sys->reg->index;
+
+    sys->reg->registers[0xF] = 0; // Detects collisions
+    for (int i = index; i < index + n; i++) {
+        for (int j = y; j < y + n; j++) {
+            // Detect if a collision occurred
+            if (sys->mem[index] ^ sys->graphics[x][j]) {
+                sys->reg->registers[0xF] = 1;
+            }
+            sys->graphics[x][j] ^= sys->mem[i];
+        }
+    }
 }
 
 void xE(unsigned char sig, unsigned char insig, chip8_sys* sys){
