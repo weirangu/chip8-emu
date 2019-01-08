@@ -26,8 +26,8 @@ void x0(unsigned char sig, unsigned char insig, chip8_sys* sys){
     if ((sig & 0x0F) == 0x00) {
         if (insig == 0xE0) {
             // 00E0
-            for (int i = 0; i < 8; i++){
-                for (int j = 0; j < 4; j++) {
+            for (int i = 0; i < SCREEN_WIDTH; i++){
+                for (int j = 0; j < SCREEN_HEIGHT; j++) {
                     sys->graphics[i][j] = 0;
                 }
             }
@@ -178,7 +178,7 @@ void xC(unsigned char sig, unsigned char insig, chip8_sys* sys){
 
 void xD(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // DXYN
-    unsigned char x = sig & 0x0F; 
+    unsigned char x = sig & 0x0F;
     unsigned char y = (insig & 0xF0) >> 4;
     unsigned char n = insig & 0x0F;
     unsigned char index = sys->reg->index;
