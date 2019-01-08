@@ -15,11 +15,10 @@ int main(int argc, char* argv[]){
             perror("File could not be open.");
             return 1;
         }
-
         initscr();
-        print_sys_mem(init_sys(file));
+        run(init_sys(file));
         refresh();
-        getch();
+        int c = getch();
         endwin();
         fclose(file);
     }

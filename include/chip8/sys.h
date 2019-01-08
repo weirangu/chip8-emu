@@ -23,4 +23,13 @@ chip8_sys* init_sys(FILE* program);
 // Prints system memory to printw (needs curses). Does not call refresh.
 void print_sys_mem(chip8_sys* sys);
 
+// Runs the system
+void run(chip8_sys* sys);
+
+// Runs 1 cycle of the system
+void cycle(chip8_sys* sys);
+
+// Prints graphics to the screen (assuming initscr() was called)
+void print(unsigned char graphics[SCREEN_WIDTH][SCREEN_HEIGHT]);
+
 #endif
