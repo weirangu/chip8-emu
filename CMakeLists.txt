@@ -14,7 +14,6 @@ list(APPEND SOURCES
 project(${PROJECT_NAME} C)
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-set(CURSES_NEED_NCURSES TRUE)
 find_package(Curses REQUIRED)
 
 # include folder

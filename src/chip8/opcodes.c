@@ -1,4 +1,4 @@
-#include <ncurses.h>
+#include <curses.h>
 #include "chip8/sys.h"
 #include "chip8/opcodes.h"
 

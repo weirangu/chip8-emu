@@ -4,7 +4,7 @@ A CHIP-8 emulator written in C11.
 
 ## Dependencies
 
-* ncurses 6.0
+* PDCurses 3.4
 
 ## Building
 

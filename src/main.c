@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <unistd.h>
-#include <ncurses.h>
+#include <curses.h>
 #include "chip8/sys.h"
 
 int main(int argc, char* argv[]){

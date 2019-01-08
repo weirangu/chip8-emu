@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <malloc.h>
-#include <ncurses.h>
+#include <curses.h>
 #include "chip8/sys.h"
 #include "chip8/reg.h"
 #include "chip8/timers.h"
+#include "chip8/opcodes.h"
 
 chip8_sys* init_sys(FILE* program){
     chip8_sys* system = malloc(sizeof(chip8_sys));
