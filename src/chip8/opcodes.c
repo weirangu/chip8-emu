@@ -196,9 +196,25 @@ void xD(unsigned char sig, unsigned char insig, chip8_sys* sys){
 }
 
 void xE(unsigned char sig, unsigned char insig, chip8_sys* sys){
-    // TODO
-    // EX9E
-    // EXA1
+    unsigned char key = sig & 0x0F;
+    switch(insig){
+        // EX9E
+        case 0x9E:
+            // Skip next instruction if key is pressed
+            if (sys->input[key]) {
+                sys->reg->pc += 0x1;
+            }
+            break;
+        // EXA1
+        case 0xA1:
+            // Skip next instruction if key isn't pressed
+            if (!sys->input[key]) {
+                sys->reg->pc += 0x1;
+            }
+            break;
+        default:
+            break;
+    }
 }
 
 void xF(unsigned char sig, unsigned char insig, chip8_sys* sys){
