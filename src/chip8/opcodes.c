@@ -243,10 +243,14 @@ void xF(unsigned char sig, unsigned char insig, chip8_sys* sys){
             //TODO
             break;
         case 0x55:
-            //TODO
+            for (unsigned short i = 0; i < 0x10; i++){
+                sys->mem[sys->reg->index + i] = sys->reg->registers[i];
+            }
             break;
         case 0x65:
-            //TODO
+            for (unsigned short i = 0; i < 0x10; i++){
+                sys->reg->registers[i] = sys->mem[sys->reg->index + i];
+            }
             break;
     }
 }
