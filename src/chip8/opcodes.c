@@ -1,4 +1,5 @@
 #include <curses.h>
+#include <stdlib.h>
 #include "chip8/sys.h"
 #include "chip8/opcodes.h"
 
@@ -181,8 +182,9 @@ void xB(unsigned char sig, unsigned char insig, chip8_sys* sys){
 }
 
 void xC(unsigned char sig, unsigned char insig, chip8_sys* sys){
-    // TODO
     // CXNN
+    unsigned char x = sig & 0x0F;
+    sys->reg->registers[x] = (rand() % 256) & insig;
 }
 
 void xD(unsigned char sig, unsigned char insig, chip8_sys* sys){
