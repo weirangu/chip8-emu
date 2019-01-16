@@ -10,6 +10,10 @@ void jump(unsigned short mem_location, chip8_reg* reg){
     reg->pc = mem_location;
 }
 
+void increment_pc(chip8_reg* reg) {
+    reg->pc += 0x2;
+}
+
 unsigned char sum(unsigned char num1, unsigned char num2, unsigned char* carry){
     if (num2 > 0xFF - num1) {
         // There will be overflow

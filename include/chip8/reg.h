@@ -14,6 +14,9 @@ void init_reg(chip8_reg* program);
 // Changes pc to mem_location. Does not affect stack.
 void jump(unsigned short mem_location, chip8_reg* reg);
 
+// Increments the program counter by 1 mem location.
+void increment_pc(chip8_reg* reg);
+
 // Returns the sum of num1 and num2, and sets the carry accordingly.
 unsigned char sum(unsigned char num1, unsigned char num2, unsigned char* carry);
 

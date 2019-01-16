@@ -31,6 +31,7 @@ void x0(unsigned char sig, unsigned char insig, chip8_sys* sys){
                     sys->graphics[i][j] = 0;
                 }
             }
+            increment_pc(sys->reg);
         }
         else {
             //00EE
@@ -69,8 +70,9 @@ void x3(unsigned char sig, unsigned char insig, chip8_sys* sys){
 
     // Skip next instruction
     if (sys->reg->registers[x] == insig) {
-        sys->reg->pc += 0x1;
+        sys->reg->pc += 0x2;
     }
+    increment_pc(sys->reg);
 }
 
 void x4(unsigned char sig, unsigned char insig, chip8_sys* sys){
@@ -79,8 +81,9 @@ void x4(unsigned char sig, unsigned char insig, chip8_sys* sys){
 
     // Skip next instruction
     if (sys->reg->registers[x] != insig) {
-        sys->reg->pc += 0x1;
+        sys->reg->pc += 0x2;
     }
+    increment_pc(sys->reg);
 }
 
 void x5(unsigned char sig, unsigned char insig, chip8_sys* sys){
@@ -90,20 +93,23 @@ void x5(unsigned char sig, unsigned char insig, chip8_sys* sys){
 
     // Skip next instruction
     if (sys->reg->registers[x] == sys->reg->registers[y]) {
-        sys->reg->pc += 0x1;
+        sys->reg->pc += 0x2;
     }
+    increment_pc(sys->reg);
 }
 
 void x6(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // 6XNN
     unsigned char reg = sig & 0x0F;
     sys->reg->registers[reg] = insig;
+    increment_pc(sys->reg);
 }
 
 void x7(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // 7XNN
     unsigned char reg = sig & 0x0F;
     sys->reg->registers[reg] += insig;
+    increment_pc(sys->reg);
 }
 
 void x8(unsigned char sig, unsigned char insig, chip8_sys* sys){
@@ -144,6 +150,7 @@ void x8(unsigned char sig, unsigned char insig, chip8_sys* sys){
             *(reg + x) <<= 1;
             break;
     }
+    increment_pc(sys->reg);
 }
 
 void x9(unsigned char sig, unsigned char insig, chip8_sys* sys){
@@ -153,8 +160,9 @@ void x9(unsigned char sig, unsigned char insig, chip8_sys* sys){
 
     // Skip next instruction
     if (sys->reg->registers[x] != sys->reg->registers[y]) {
-        sys->reg->pc += 0x1;
+        sys->reg->pc += 0x2;
     }
+    increment_pc(sys->reg);
 }
 
 void xA(unsigned char sig, unsigned char insig, chip8_sys* sys){
@@ -162,6 +170,7 @@ void xA(unsigned char sig, unsigned char insig, chip8_sys* sys){
     short address = sig << 8 | insig;
     address &= 0x0FFF; // We don't want the most significant nibble
     sys->reg->index = sys->mem[address];
+    increment_pc(sys->reg);
 }
 
 void xB(unsigned char sig, unsigned char insig, chip8_sys* sys){
@@ -193,6 +202,7 @@ void xD(unsigned char sig, unsigned char insig, chip8_sys* sys){
             sys->graphics[x][j] ^= sys->mem[i];
         }
     }
+    increment_pc(sys->reg);
 }
 
 void xE(unsigned char sig, unsigned char insig, chip8_sys* sys){
@@ -202,19 +212,20 @@ void xE(unsigned char sig, unsigned char insig, chip8_sys* sys){
         case 0x9E:
             // Skip next instruction if key is pressed
             if (sys->input[key]) {
-                sys->reg->pc += 0x1;
+                sys->reg->pc += 0x2;
             }
             break;
         // EXA1
         case 0xA1:
             // Skip next instruction if key isn't pressed
             if (!sys->input[key]) {
-                sys->reg->pc += 0x1;
+                sys->reg->pc += 0x2;
             }
             break;
         default:
             break;
     }
+    increment_pc(sys->reg);
 }
 
 void xF(unsigned char sig, unsigned char insig, chip8_sys* sys){
@@ -253,4 +264,5 @@ void xF(unsigned char sig, unsigned char insig, chip8_sys* sys){
             }
             break;
     }
+    increment_pc(sys->reg);
 }
