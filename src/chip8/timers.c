@@ -1,4 +1,4 @@
-#include "timers.h"
+#include "chip8/timers.h"
 
 void init_timers(chip8_timers* timer){
 }

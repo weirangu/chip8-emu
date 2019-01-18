@@ -36,9 +36,9 @@ void print_sys_mem(chip8_sys* sys){
 void run(chip8_sys* sys){
     while (1) {
         cycle(sys);
+        decrement_timer(sys->timers, beep());
 
         print(sys->graphics);
-        int i = getch();
     }
 }
 

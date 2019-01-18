@@ -23,7 +23,6 @@ void (* ops[0x10])(unsigned char sig, unsigned char insig, chip8_sys* sys) = {
 };
 
 void x0(unsigned char sig, unsigned char insig, chip8_sys* sys){
-    // TODO
     if ((sig & 0x0F) == 0x00) {
         if (insig == 0xE0) {
             // 00E0
