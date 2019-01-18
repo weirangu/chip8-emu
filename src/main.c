@@ -19,6 +19,7 @@ int main(int argc, char* argv[]){
     WINDOW* win = initscr();
     cbreak();
     noecho();
+    curs_set(0); // Sets cursor to invis
     nodelay(win, TRUE);
 
     run(init_sys(file));

@@ -32,4 +32,10 @@ void cycle(chip8_sys* sys);
 // Prints graphics to the screen (assuming initscr() was called)
 void print(unsigned char graphics[SCREEN_WIDTH][SCREEN_HEIGHT]);
 
+// Prints system info at the sides of the screen (assuming initscr() was called)
+void print_sys_info(chip8_sys* sys);
+
+// Gets input from curses
+void get_input(chip8_sys* sys);
+
 #endif

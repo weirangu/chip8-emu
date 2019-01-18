@@ -10,6 +10,6 @@ typedef struct chip8_timers {
 void init_timers(chip8_timers* timer);
 
 // Decrements timers. If sound timer reaches 0, sound() is called.
-void decrement_timer(chip8_timers* timer, void (*sound) ());
+void decrement_timer(chip8_timers* timer, int (*sound) (void));
 
 #endif

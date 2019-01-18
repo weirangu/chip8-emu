@@ -3,7 +3,7 @@
 void init_timers(chip8_timers* timer){
 }
 
-void decrement_timer(chip8_timers* timer, void (*sound) ()){
+void decrement_timer(chip8_timers* timer, int (*sound) (void)){
     if (timer->delay_timer > 0){
         timer->delay_timer--;
     }
