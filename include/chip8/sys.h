@@ -6,7 +6,7 @@
 #include "chip8/timers.h"
 
 #define SCREEN_WIDTH 8
-#define SCREEN_HEIGHT 4
+#define SCREEN_HEIGHT 32
 
 typedef struct chip8_sys {
     unsigned char mem[4096];

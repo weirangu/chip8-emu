@@ -56,20 +56,20 @@ void cycle(chip8_sys* sys){
 void print(unsigned char graphics[SCREEN_WIDTH][SCREEN_HEIGHT]) {
     //clear();
 
-    for (int i = 0; i < SCREEN_WIDTH; i++) {
-        for (int j = 0; j < SCREEN_HEIGHT; j++) {
-            for (int k = 1; k != 0x10; k <<= 1){
+    for (int i = 0; i < SCREEN_HEIGHT; i++) {
+        for (int j = 0; j < SCREEN_WIDTH; j++) {
+            for (int k = 1; k <= 0x80; k <<= 1){
                 // We see the value of each bit and draw if its a 1
-                bool bit = graphics[SCREEN_WIDTH][SCREEN_HEIGHT] & k;
+                bool bit = graphics[i][j] & k;
                 if (bit) {
-                    printw("█");
+                    addch(ACS_BLOCK);
                 }
                 else {
-                    printw(" ");
+                    addch('0');
                 }
             }
         }
-        printw("\n");
+        addch('\n');
     }
 
     refresh();
