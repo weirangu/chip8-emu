@@ -237,7 +237,7 @@ void xF(unsigned char sig, unsigned char insig, chip8_sys* sys){
             sys->reg->registers[x] = sys->timers->delay_timer;
             break;
         case 0x0A:
-            //TODO
+            sys->reg->registers[x] = return_input_blocking(sys->curses_win);
             break;
         case 0x15:
             sys->timers->delay_timer = sys->reg->registers[x];

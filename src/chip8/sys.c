@@ -6,10 +6,11 @@
 #include "chip8/timers.h"
 #include "chip8/opcodes.h"
 
-chip8_sys* init_sys(FILE* program){
+chip8_sys* init_sys(FILE* program, WINDOW* curses){
     chip8_sys* system = malloc(sizeof(chip8_sys));
     system->reg = malloc(sizeof(chip8_reg));
     system->timers = malloc(sizeof(chip8_timers));
+    system->curses_win = curses;
 
     init_reg(system->reg);
 
@@ -118,56 +119,51 @@ void get_input(chip8_sys* sys) {
 
     int key;
     while ((key = getch()) != ERR){
-        // We want to map keyboard keys to the CHIP 8 keypad.
-        switch (key) {
-            case '1':
-                sys->input[0x1] = TRUE;
-                break;
-            case '2':
-                sys->input[0x2] = TRUE;
-                break;
-            case '3':
-                sys->input[0x3] = TRUE;
-                break;
-            case '4':
-                sys->input[0xC] = TRUE;
-                break;
-            case 'q':
-                sys->input[0x4] = TRUE;
-                break;
-            case 'w':
-                sys->input[0x5] = TRUE;
-                break;
-            case 'e':
-                sys->input[0x6] = TRUE;
-                break;
-            case 'r':
-                sys->input[0xD] = TRUE;
-                break;
-            case 'a':
-                sys->input[0x7] = TRUE;
-                break;
-            case 's':
-                sys->input[0x8] = TRUE;
-                break;
-            case 'd':
-                sys->input[0x9] = TRUE;
-                break;
-            case 'f':
-                sys->input[0xE] = TRUE;
-                break;
-            case 'z':
-                sys->input[0xA] = TRUE;
-                break;
-            case 'x':
-                sys->input[0x0] = TRUE;
-                break;
-            case 'c':
-                sys->input[0xB] = TRUE;
-                break;
-            case 'v':
-                sys->input[0xF] = TRUE;
-                break;
-        }
+        sys->input[map_key(key)] = TRUE;
     }
+}
+
+int return_input_blocking(WINDOW* win) {
+    nodelay(win, FALSE);
+    int key = getch();
+    nodelay(win, TRUE);
+    return map_key(key);
+}
+
+int map_key(int key) {
+    switch (key) {
+        case '1':
+            return 0x1;
+        case '2':
+            return 0x2;
+        case '3':
+            return 0x3;
+        case '4':
+            return 0xC;
+        case 'q':
+            return 0x4;
+        case 'w':
+            return 0x5;
+        case 'e':
+            return 0x6;
+        case 'r':
+            return 0xD;
+        case 'a':
+            return 0x7;
+        case 's':
+            return 0x8;
+        case 'd':
+            return 0x9;
+        case 'f':
+            return 0xE;
+        case 'z':
+            return 0xA;
+        case 'x':
+            return 0x0;
+        case 'c':
+            return 0xB;
+        case 'v':
+            return 0xF;
+    }
+    return -0x1;
 }
