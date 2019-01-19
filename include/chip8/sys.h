@@ -18,6 +18,9 @@ typedef struct chip8_sys {
     WINDOW* curses_win; // Required for setting timeout();
 } chip8_sys;
 
+// Fonts from http://devernay.free.fr/hacks/chip8/C8TECH10.HTM
+unsigned char fonts[0x50];
+
 // Initializes the system with a program.
 // FILE* program is the CHIP8 ROM that we should load.
 // WINDOW* curses is the curses window

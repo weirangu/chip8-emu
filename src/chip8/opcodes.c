@@ -249,10 +249,12 @@ void xF(unsigned char sig, unsigned char insig, chip8_sys* sys){
             sys->reg->index += sys->reg->registers[x];
             break;
         case 0x29:
-            //TODO
+            sys->reg->index = sys->reg->registers[x] * 0x5;
             break;
         case 0x33:
-            //TODO
+            sys->mem[sys->reg->index] = sys->reg->registers[x] / 100; // Most sig digit
+            sys->mem[sys->reg->index + 1] = (sys->reg->registers[x] / 10) % 10;
+            sys->mem[sys->reg->index + 2] = sys->reg->registers[x] % 10; // Least sig digit
             break;
         case 0x55:
             for (unsigned short i = 0; i < 0x10; i++){

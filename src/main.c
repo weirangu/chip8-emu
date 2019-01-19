@@ -22,7 +22,7 @@ int main(int argc, char* argv[]){
     curs_set(0); // Sets cursor to invis
     nodelay(win, TRUE);
 
-    run(init_sys(file));
+    run(init_sys(file, win));
 
     endwin();
     fclose(file);
