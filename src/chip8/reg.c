@@ -3,6 +3,7 @@
 #include "chip8/reg.h"
 
 void init_reg(chip8_reg* reg){
+    reg->stack_pointer = 0;
     reg->pc = 512; // The first instruction is at 512
 }
 
@@ -23,7 +24,7 @@ unsigned char sum(unsigned char num1, unsigned char num2, unsigned char* carry){
         *carry = 0;
     }
 
-    unsigned short sum = num1 + num2;
+    return num1 + num2;
 }
 
 unsigned char subtract(unsigned char num1, unsigned char num2, unsigned char* borrow) {
@@ -35,5 +36,5 @@ unsigned char subtract(unsigned char num1, unsigned char num2, unsigned char* bo
         *borrow = 0;
     }
 
-    unsigned short diff = num1 - num2;
+    return num1 - num2;
 }
