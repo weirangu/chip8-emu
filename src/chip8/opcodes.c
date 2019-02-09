@@ -26,7 +26,7 @@ void x0(unsigned char sig, unsigned char insig, chip8_sys* sys){
     if ((sig & 0x0F) == 0x00) {
         if (insig == 0xE0) {
             // 00E0
-            for (int i = 0; i < SCREEN_WIDTH; i++){
+            for (int i = 0; i < SCREEN_WIDTH; i++) {
                 for (int j = 0; j < SCREEN_HEIGHT; j++) {
                     sys->graphics[i][j] = 0;
                 }
@@ -58,7 +58,7 @@ void x2(unsigned char sig, unsigned char insig, chip8_sys* sys){
     mem_location &= 0x0FFF;
 
     // Stores current location in stack
-    sys->reg->stack[sys->reg->stack_pointer + 1] = sys->reg->index;
+    sys->reg->stack[sys->reg->stack_pointer] = sys->reg->index;
     sys->reg->stack_pointer++;
 
     jump(mem_location, sys->reg);
@@ -119,7 +119,7 @@ void x8(unsigned char sig, unsigned char insig, chip8_sys* sys){
 
     unsigned char* reg = sys->reg->registers;
 
-    switch (op){
+    switch (op) {
         case 0x00:
             *(reg + x) = *(reg + y);
             break;
@@ -184,31 +184,30 @@ void xC(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // CXNN
     unsigned char x = sig & 0x0F;
     sys->reg->registers[x] = (rand() % 256) & insig;
+    increment_pc(sys->reg);
 }
 
 void xD(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // DXYN
-    unsigned char x = sig & 0x0F;
-    unsigned char y = (insig & 0xF0) >> 4;
+    unsigned char x = sys->reg->registers[sig & 0x0F];
+    unsigned char y = sys->reg->registers[(insig & 0xF0) >> 4];
     unsigned char n = insig & 0x0F;
-    unsigned char index = sys->reg->index;
+    unsigned short index = sys->reg->index;
 
     sys->reg->registers[0xF] = 0; // Detects collisions
-    for (int i = index; i < index + n; i++) {
-        for (int j = y; j < y + n; j++) {
-            // Detect if a collision occurred
-            if (sys->mem[index] ^ sys->graphics[x][j]) {
-                sys->reg->registers[0xF] = 1;
-            }
-            sys->graphics[x][j] ^= sys->mem[i];
+    for (int i = 0; i < n; i++) { // Loop through the heights
+        // Detect if a collision occurred
+        if (sys->mem[index + i] ^ sys->graphics[x][y + i]) {
+            sys->reg->registers[0xF] = 1;
         }
+        sys->graphics[x][y + i] ^= sys->mem[i];
     }
     increment_pc(sys->reg);
 }
 
 void xE(unsigned char sig, unsigned char insig, chip8_sys* sys){
     unsigned char key = sig & 0x0F;
-    switch(insig){
+    switch (insig) {
         // EX9E
         case 0x9E:
             // Skip next instruction if key is pressed
@@ -232,7 +231,7 @@ void xE(unsigned char sig, unsigned char insig, chip8_sys* sys){
 void xF(unsigned char sig, unsigned char insig, chip8_sys* sys){
     unsigned char x = sig & 0x0F;
 
-    switch (insig){
+    switch (insig) {
         case 0x07:
             sys->reg->registers[x] = sys->timers->delay_timer;
             break;
@@ -257,12 +256,12 @@ void xF(unsigned char sig, unsigned char insig, chip8_sys* sys){
             sys->mem[sys->reg->index + 2] = sys->reg->registers[x] % 10; // Least sig digit
             break;
         case 0x55:
-            for (unsigned short i = 0; i < 0x10; i++){
+            for (unsigned short i = 0; i < 0x10; i++) {
                 sys->mem[sys->reg->index + i] = sys->reg->registers[i];
             }
             break;
         case 0x65:
-            for (unsigned short i = 0; i < 0x10; i++){
+            for (unsigned short i = 0; i < 0x10; i++) {
                 sys->reg->registers[i] = sys->mem[sys->reg->index + i];
             }
             break;

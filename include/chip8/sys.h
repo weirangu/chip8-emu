@@ -15,7 +15,9 @@ typedef struct chip8_sys {
     unsigned char graphics[SCREEN_WIDTH][SCREEN_HEIGHT];
     unsigned char input[0x10];
 
+    // Debug vars
     WINDOW* curses_win; // Required for setting timeout();
+    unsigned short prev_ops[64]; // Holds the 64 most recently executed opcodes
 } chip8_sys;
 
 // Fonts from http://devernay.free.fr/hacks/chip8/C8TECH10.HTM
@@ -34,6 +36,8 @@ void run(chip8_sys* sys);
 
 // Runs 1 cycle of the system
 void cycle(chip8_sys* sys);
+
+void run_opcode(chip8_sys* sys);
 
 // Prints graphics to the screen (assuming initscr() was called)
 void print(unsigned char graphics[SCREEN_WIDTH][SCREEN_HEIGHT]);

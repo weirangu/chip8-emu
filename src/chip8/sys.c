@@ -13,6 +13,7 @@ chip8_sys* init_sys(FILE* program, WINDOW* curses){
     system->curses_win = curses;
 
     init_reg(system->reg);
+    init_timers(system->timers);
 
     // Load fonts into memory
     for (int i = 0; i < 0x50; i++){
@@ -27,6 +28,13 @@ chip8_sys* init_sys(FILE* program, WINDOW* curses){
             system->mem[mem_location] = c;
             mem_location++; // getc reads in sizeof(c) (which is 8 bytes) at a time
             c = getc(program);
+        }
+    }
+
+    // Clear display
+    for (int i = 0; i < SCREEN_HEIGHT; i++) {
+        for (int j = 0; j < SCREEN_WIDTH; j++) {
+            system->graphics[j][i] = 0;
         }
     }
 
@@ -68,13 +76,23 @@ void run(chip8_sys* sys){
 }
 
 void cycle(chip8_sys* sys){
+    run_opcode(sys);
+
+    // Runs opcode
+    decrement_timer(sys->timers, beep);
+    get_input(sys);
+}
+
+void run_opcode(chip8_sys* sys) {
     unsigned short pc = sys->reg->pc;
     unsigned char opcode_sig = sys->mem[pc];
     unsigned char opcode_insig = sys->mem[pc + 1];
 
-    // Runs opcode
     ops[(opcode_sig & 0xF0) >> 4](opcode_sig, opcode_insig, sys);
-    decrement_timer(sys->timers, beep);
+    for (int i = 62; i >= 0; i--) {
+        sys->prev_ops[i + 1] = sys->prev_ops[i];
+    }
+    sys->prev_ops[0] = (opcode_sig << 8) | opcode_insig;
 }
 
 void print(unsigned char graphics[SCREEN_WIDTH][SCREEN_HEIGHT]) {
@@ -84,12 +102,12 @@ void print(unsigned char graphics[SCREEN_WIDTH][SCREEN_HEIGHT]) {
         for (int j = 0; j < SCREEN_WIDTH; j++) {
             for (int k = 1; k <= 0x80; k <<= 1){
                 // We see the value of each bit and draw if its a 1
-                bool bit = graphics[i][j] & k;
+                int bit = graphics[j][i] & k;
                 if (bit) {
                     addch(ACS_BLOCK);
                 }
                 else {
-                    addch('0');
+                    addch(' ');
                 }
             }
         }
@@ -132,6 +150,12 @@ void print_sys_info(chip8_sys* sys) {
 
     // Print I
     printw("I     %3x\n", sys->reg->index);
+
+    // Prints opcode info
+    for (int i = 0; i < 64; i++) {
+        move(i, SCREEN_WIDTH * 8 + 1);
+        printw("%3x \n", sys->prev_ops[i]);
+    }
     refresh();
 }
 
