@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <curses.h>
+#include <windows.h>
 #include "chip8/sys.h"
 #include "chip8/reg.h"
 #include "chip8/timers.h"
@@ -72,6 +73,7 @@ void run(chip8_sys* sys){
 
         print(sys->graphics);
         print_sys_info(sys);
+        Sleep(1000);
     }
 }
 
@@ -107,7 +109,7 @@ void print(unsigned char graphics[SCREEN_WIDTH][SCREEN_HEIGHT]) {
                     addch(ACS_BLOCK);
                 }
                 else {
-                    addch(' ');
+                    addch('.');
                 }
             }
         }

@@ -167,9 +167,9 @@ void x9(unsigned char sig, unsigned char insig, chip8_sys* sys){
 
 void xA(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // ANNN
-    short address = sig << 8 | insig;
-    address &= 0x0FFF; // We don't want the most significant nibble
-    sys->reg->index = sys->mem[address];
+    unsigned short val = sig << 8 | insig;
+    val &= 0x0FFF; // We don't want the most significant nibble
+    sys->reg->index = val;
     increment_pc(sys->reg);
 }
 
@@ -200,7 +200,14 @@ void xD(unsigned char sig, unsigned char insig, chip8_sys* sys){
         if (sys->mem[index + i] ^ sys->graphics[x][y + i]) {
             sys->reg->registers[0xF] = 1;
         }
-        sys->graphics[x][y + i] ^= sys->mem[i];
+        for (int j = x; j < x + 8; j++) { // Loop over the x values
+
+            // Detect if a collision occurred
+            if ((sys->mem[index + i] & 1 << (j - x) % 8) ^ (sys->graphics[j / 8][y + i] | 1 << j % 8)) {
+                sys->reg->registers[0xF] = 1;
+            }
+            sys->graphics[x / 8][y + i] ^= (sys->mem[index + i] & 1 << (7 - ((j - x) % 8)));
+        }
     }
     increment_pc(sys->reg);
 }
