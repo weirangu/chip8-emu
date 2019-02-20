@@ -13,9 +13,9 @@
 #include "chip8/opcodes.h"
 
 chip8_sys* init_sys(FILE* program, WINDOW* curses){
-    chip8_sys* system = malloc(sizeof(chip8_sys));
-    system->reg = malloc(sizeof(chip8_reg));
-    system->timers = malloc(sizeof(chip8_timers));
+    chip8_sys* system = calloc(1, sizeof(chip8_sys));
+    system->reg = calloc(1, sizeof(chip8_reg));
+    system->timers = calloc(1, sizeof(chip8_timers));
     system->curses_win = curses;
 
     init_reg(system->reg);
@@ -36,14 +36,6 @@ chip8_sys* init_sys(FILE* program, WINDOW* curses){
             c = getc(program);
         }
     }
-
-    // Clear display
-    for (int i = 0; i < SCREEN_HEIGHT; i++) {
-        for (int j = 0; j < SCREEN_WIDTH; j++) {
-            system->graphics[j][i] = 0;
-        }
-    }
-
     return system;
 }
 
@@ -82,7 +74,7 @@ void run(chip8_sys* sys){
         Sleep(1000);
 #endif
 #ifdef __linux__
-        usleep(1000 * 1000);
+        usleep(1000 * 10);
 #endif
     }
 }

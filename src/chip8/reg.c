@@ -3,7 +3,6 @@
 #include "chip8/reg.h"
 
 void init_reg(chip8_reg* reg){
-    reg->stack_pointer = 0;
     reg->pc = 512; // The first instruction is at 512
 }
 

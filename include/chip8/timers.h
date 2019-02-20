@@ -6,7 +6,7 @@ typedef struct chip8_timers {
     unsigned char sound_timer;
 } chip8_timers;
 
-// Initializes timers.
+// Initializes timers. Assumes timer has been calloced.
 void init_timers(chip8_timers* timer);
 
 // Decrements timers. If sound timer reaches 0, sound() is called.

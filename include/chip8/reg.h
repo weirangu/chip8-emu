@@ -9,7 +9,8 @@ typedef struct chip8_reg{
     unsigned char stack_pointer;
 } chip8_reg;
 
-void init_reg(chip8_reg* program);
+// Initializes the register (assumes reg has been calloced)
+void init_reg(chip8_reg* reg);
 
 // Changes pc to mem_location. Does not affect stack.
 void jump(unsigned short mem_location, chip8_reg* reg);

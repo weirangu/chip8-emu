@@ -17,7 +17,7 @@ typedef struct chip8_sys {
     unsigned char input[0x10];
 
     // Debug vars
-    WINDOW* curses_win; // Required for setting timeout();
+    WINDOW* curses_win; // Required for setting timeout()
     unsigned short prev_ops[64]; // Holds the 64 most recently executed opcodes
 } chip8_sys;
 
