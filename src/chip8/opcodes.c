@@ -37,6 +37,7 @@ void x0(unsigned char sig, unsigned char insig, chip8_sys* sys){
             //00EE
             unsigned char location = --sys->reg->stack_pointer;
             jump(sys->reg->stack[location], sys->reg);
+            increment_pc(sys->reg);
         }
     }
     else {
@@ -58,7 +59,7 @@ void x2(unsigned char sig, unsigned char insig, chip8_sys* sys){
     mem_location &= 0x0FFF;
 
     // Stores current location in stack
-    sys->reg->stack[sys->reg->stack_pointer] = sys->reg->index;
+    sys->reg->stack[sys->reg->stack_pointer] = sys->reg->pc;
     sys->reg->stack_pointer++;
 
     jump(mem_location, sys->reg);
