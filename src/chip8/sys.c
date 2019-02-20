@@ -1,7 +1,12 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <curses.h>
+#ifdef _WIN32
 #include <windows.h>
+#endif
+#ifdef __linux__
+#include <unistd.h>
+#endif
 #include "chip8/sys.h"
 #include "chip8/reg.h"
 #include "chip8/timers.h"
@@ -73,7 +78,12 @@ void run(chip8_sys* sys){
 
         print(sys->graphics);
         print_sys_info(sys);
+#ifdef _WIN32
         Sleep(1000);
+#endif
+#ifdef __linux__
+        usleep(1000 * 1000);
+#endif
     }
 }
 
@@ -163,7 +173,7 @@ void print_sys_info(chip8_sys* sys) {
 
 void get_input(chip8_sys* sys) {
     // Reset keys
-    for (unsigned char i = 0; i < 0xF0; i++) {
+    for (unsigned char i = 0; i < 0x10; i++) {
         sys->input[i] = FALSE;
     }
 

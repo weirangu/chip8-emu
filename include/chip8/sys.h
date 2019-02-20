@@ -2,6 +2,7 @@
 #define CHIP8_SYS_H
 
 #include <stdio.h>
+#include <curses.h>
 #include "chip8/reg.h"
 #include "chip8/timers.h"
 
