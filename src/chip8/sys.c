@@ -104,7 +104,7 @@ void print(unsigned char graphics[SCREEN_WIDTH][SCREEN_HEIGHT]) {
 
     for (int i = 0; i < SCREEN_HEIGHT; i++) {
         for (int j = 0; j < SCREEN_WIDTH; j++) {
-            for (int k = 1; k <= 0x80; k <<= 1){
+            for (int k = 0x80; k > 0x00; k >>= 1){
                 // We see the value of each bit and draw if its a 1
                 int bit = graphics[j][i] & k;
                 if (bit) {
@@ -113,6 +113,8 @@ void print(unsigned char graphics[SCREEN_WIDTH][SCREEN_HEIGHT]) {
                 else {
                     addch('.');
                 }
+                if (k == 0x00)
+                    break; // If we keep right shifting, we stay at 0
             }
         }
         addch('\n');
