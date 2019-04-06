@@ -27,8 +27,8 @@ unsigned char sum(unsigned char num1, unsigned char num2, unsigned char* carry){
 }
 
 unsigned char subtract(unsigned char num1, unsigned char num2, unsigned char* borrow) {
-    if (num2 > num1) {
-        // We need to borrow
+    if (num2 < num1) {
+        // We don't need to borrow
         *borrow = 1;
     }
     else {

@@ -59,8 +59,7 @@ void x2(unsigned char sig, unsigned char insig, chip8_sys* sys){
     mem_location &= 0x0FFF;
 
     // Stores current location in stack
-    sys->reg->stack[sys->reg->stack_pointer] = sys->reg->pc;
-    sys->reg->stack_pointer++;
+    sys->reg->stack[sys->reg->stack_pointer++] = sys->reg->pc;
 
     jump(mem_location, sys->reg);
 }
@@ -122,33 +121,33 @@ void x8(unsigned char sig, unsigned char insig, chip8_sys* sys){
 
     switch (op) {
         case 0x00:
-            *(reg + x) = *(reg + y);
+            reg[x] = reg[y];
             break;
         case 0x01:
-            *(reg + x) |= *(reg + y);
+            reg[x] |= reg[y];
             break;
         case 0x02:
-            *(reg + x) &= *(reg + y);
+            reg[x] &= reg[y];
             break;
         case 0x03:
-            *(reg + x) ^= *(reg + y);
+            reg[x] ^= reg[y];
             break;
         case 0x04:
-            *(reg + x) = sum(*(reg + x), *(reg + y), reg + 0xF);
+            reg[x] = sum(reg[x], reg[y], reg + 0xF);
             break;
         case 0x05:
-            *(reg + x) = subtract(*(reg + x), *(reg + y), reg + 0xF);
+            reg[x] = subtract(reg[x], reg[y], reg + 0xF);
             break;
         case 0x06:
-            *(reg + 0xF) = *(reg + x) & 0x01;
-            *(reg + x) >>= 1;
+            reg[0xF] = reg[x] & 0x01;
+            reg[x] >>= 1;
             break;
         case 0x07:
-            *(reg + x) = subtract(*(reg + y), *(reg + x), reg + 0xF);
+            reg[x] = subtract(reg[y], reg[x], reg + 0xF);
             break;
         case 0x0E:
-            *(reg + 0xF) = *(reg + x) & 0x80;
-            *(reg + x) <<= 1;
+            reg[0xF] = (reg[x] & 0x80) >> 7;
+            reg[x] <<= 1;
             break;
     }
     increment_pc(sys->reg);
@@ -176,8 +175,9 @@ void xA(unsigned char sig, unsigned char insig, chip8_sys* sys){
 
 void xB(unsigned char sig, unsigned char insig, chip8_sys* sys){
     // BNNN
-    unsigned short mem_location = sig << 8 | insig + sys->reg->registers[0x0];
+    unsigned short mem_location = sig << 8 | insig;
     mem_location &= 0x0FFF;
+    mem_location += sys->reg->registers[0];
     jump(mem_location, sys->reg);
 }
 
@@ -200,7 +200,7 @@ void xD(unsigned char sig, unsigned char insig, chip8_sys* sys){
         for (int j = x; j < x + 8; j++) { // Loop over the x values
             unsigned char b = sys->mem[index + i] & 1 << (7 - ((j - x) % 8));
             // Detect if a collision occurred
-            if ((sys->graphics[j / 8][y + i] & 1 << (7 - j % 8)) == 1 && b) {
+            if ((sys->graphics[j / 8][y + i] & 1 << (7 - j % 8)) && b) {
                 sys->reg->registers[0xF] = 1;
             }
             if (b) // if not b, we don't need to XOR
@@ -254,6 +254,7 @@ void xF(unsigned char sig, unsigned char insig, chip8_sys* sys){
             break;
         case 0x29:
             sys->reg->index = sys->reg->registers[x] * 0x5;
+            fprintf(stderr, "digit %d asked", sys->reg->index);
             break;
         case 0x33:
             sys->mem[sys->reg->index] = sys->reg->registers[x] / 100; // Most sig digit
@@ -261,12 +262,12 @@ void xF(unsigned char sig, unsigned char insig, chip8_sys* sys){
             sys->mem[sys->reg->index + 2] = sys->reg->registers[x] % 10; // Least sig digit
             break;
         case 0x55:
-            for (unsigned short i = 0; i < 0x10; i++) {
+            for (unsigned short i = 0; i < x; i++) {
                 sys->mem[sys->reg->index + i] = sys->reg->registers[i];
             }
             break;
         case 0x65:
-            for (unsigned short i = 0; i < 0x10; i++) {
+            for (unsigned short i = 0; i < x; i++) {
                 sys->reg->registers[i] = sys->mem[sys->reg->index + i];
             }
             break;
