@@ -166,14 +166,16 @@ void print_sys_info(chip8_sys* sys) {
 }
 
 void get_input(chip8_sys* sys) {
-    // Reset keys
     for (unsigned char i = 0; i < 0x10; i++) {
-        sys->input[i] = FALSE;
+        if (sys->input[i]) {
+            // Lower keys by 1
+            sys->input[i] -= 1;
+        }
     }
 
     int key;
     while ((key = getch()) != ERR){
-        sys->input[map_key(key)] = TRUE;
+        sys->input[map_key(key)] = 10;
     }
 }
 
