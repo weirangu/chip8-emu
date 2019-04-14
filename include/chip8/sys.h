@@ -16,8 +16,10 @@ typedef struct chip8_sys {
     unsigned char graphics[SCREEN_WIDTH][SCREEN_HEIGHT];
     unsigned char input[0x10];
 
+    int cycle_time; // How long each cycle takes in ms
+    int key_hold_time; // How many cycles a keypress is held for once a keypress is detected
+
     // Debug vars
-    WINDOW* curses_win; // Required for setting timeout()
     unsigned short prev_ops[64]; // Holds the 64 most recently executed opcodes
 } chip8_sys;
 
@@ -27,7 +29,7 @@ unsigned char fonts[0x50];
 // Initializes the system with a program.
 // FILE* program is the CHIP8 ROM that we should load.
 // WINDOW* curses is the curses window
-chip8_sys* init_sys(FILE* program, WINDOW* curses);
+chip8_sys* init_sys(FILE* program, int speed, int key_hold_time);
 
 // Prints system memory to printw (needs curses). Does not call refresh.
 void print_sys_mem(chip8_sys* sys);

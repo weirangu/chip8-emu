@@ -3,6 +3,8 @@
 #include "chip8/sys.h"
 #include "chip8/opcodes.h"
 
+extern WINDOW* curses_win;
+
 void (* ops[0x10])(unsigned char sig, unsigned char insig, chip8_sys* sys) = {
         x0, // 0x0
         x1, // 0x1
@@ -217,14 +219,14 @@ void xE(unsigned char sig, unsigned char insig, chip8_sys* sys){
         case 0x9E:
             // Skip next instruction if key is pressed
             if (sys->input[key]) {
-                sys->reg->pc += 0x2;
+                sys->reg->pc += 0x02;
             }
             break;
         // EXA1
         case 0xA1:
             // Skip next instruction if key isn't pressed
             if (!sys->input[key]) {
-                sys->reg->pc += 0x2;
+                sys->reg->pc += 0x02;
             }
             break;
         default:
@@ -241,7 +243,7 @@ void xF(unsigned char sig, unsigned char insig, chip8_sys* sys){
             sys->reg->registers[x] = sys->timers->delay_timer;
             break;
         case 0x0A:
-            sys->reg->registers[x] = return_input_blocking(sys->curses_win);
+            sys->reg->registers[x] = return_input_blocking(curses_win);
             break;
         case 0x15:
             sys->timers->delay_timer = sys->reg->registers[x];
@@ -254,7 +256,6 @@ void xF(unsigned char sig, unsigned char insig, chip8_sys* sys){
             break;
         case 0x29:
             sys->reg->index = sys->reg->registers[x] * 0x5;
-            fprintf(stderr, "digit %d asked", sys->reg->index);
             break;
         case 0x33:
             sys->mem[sys->reg->index] = sys->reg->registers[x] / 100; // Most sig digit

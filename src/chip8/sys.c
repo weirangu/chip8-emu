@@ -12,14 +12,18 @@
 #include "chip8/timers.h"
 #include "chip8/opcodes.h"
 
-chip8_sys* init_sys(FILE* program, WINDOW* curses){
+extern bool debug;
+
+chip8_sys* init_sys(FILE* program, int speed, int key_hold_time){
     chip8_sys* system = calloc(1, sizeof(chip8_sys));
     system->reg = calloc(1, sizeof(chip8_reg));
     system->timers = calloc(1, sizeof(chip8_timers));
-    system->curses_win = curses;
 
     init_reg(system->reg);
     init_timers(system->timers);
+
+    system->cycle_time = speed;
+    system->key_hold_time = key_hold_time;
 
     // Load fonts into memory
     for (int i = 0; i < 0x50; i++){
@@ -69,12 +73,14 @@ void run(chip8_sys* sys){
         cycle(sys);
 
         print(sys->graphics);
-        print_sys_info(sys);
+        if (debug) {
+            print_sys_info(sys);
+        }
 #ifdef _WIN32
-        Sleep(1000);
+        Sleep(sys->cycle_time);
 #endif
 #ifdef __linux__
-        usleep(1000 * 10);
+        usleep(1000 * sys->cycle_time);
 #endif
     }
 }
@@ -111,7 +117,7 @@ void print(unsigned char graphics[SCREEN_WIDTH][SCREEN_HEIGHT]) {
                     addch(ACS_BLOCK);
                 }
                 else {
-                    addch('.');
+                    addch(' ');
                 }
                 if (k == 0x00)
                     break; // If we keep right shifting, we stay at 0
@@ -175,7 +181,7 @@ void get_input(chip8_sys* sys) {
 
     int key;
     while ((key = getch()) != ERR){
-        sys->input[map_key(key)] = 10;
+        sys->input[map_key(key)] =sys->key_hold_time;
     }
 }
 
