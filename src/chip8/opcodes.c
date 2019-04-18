@@ -213,7 +213,7 @@ void xD(unsigned char sig, unsigned char insig, chip8_sys* sys){
 }
 
 void xE(unsigned char sig, unsigned char insig, chip8_sys* sys){
-    unsigned char key = sig & 0x0F;
+    unsigned char key = sys->reg->registers[sig & 0x0F];
     switch (insig) {
         // EX9E
         case 0x9E:
@@ -263,12 +263,12 @@ void xF(unsigned char sig, unsigned char insig, chip8_sys* sys){
             sys->mem[sys->reg->index + 2] = sys->reg->registers[x] % 10; // Least sig digit
             break;
         case 0x55:
-            for (unsigned short i = 0; i < x; i++) {
+            for (unsigned short i = 0; i <= x; i++) {
                 sys->mem[sys->reg->index + i] = sys->reg->registers[i];
             }
             break;
         case 0x65:
-            for (unsigned short i = 0; i < x; i++) {
+            for (unsigned short i = 0; i <= x; i++) {
                 sys->reg->registers[i] = sys->mem[sys->reg->index + i];
             }
             break;
