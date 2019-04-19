@@ -22,7 +22,7 @@ chip8_sys* init_sys(FILE* program, int speed, int key_hold_time){
     init_reg(system->reg);
     init_timers(system->timers);
 
-    system->cycle_time = speed;
+    system->ms_per_cycle = speed;
     system->key_hold_time = key_hold_time;
 
     // Load fonts into memory
@@ -77,10 +77,11 @@ void run(chip8_sys* sys){
             print_sys_info(sys);
         }
 #ifdef _WIN32
-        Sleep(sys->cycle_time);
+
+        Sleep(sys->ms_per_cycle); // ~60Hz
 #endif
 #ifdef __linux__
-        usleep(1000 * sys->cycle_time);
+        usleep(1000 * sys->ms_per_cycle); // ~60Hz
 #endif
     }
 }
@@ -89,7 +90,7 @@ void cycle(chip8_sys* sys){
     run_opcode(sys);
 
     // Runs opcode
-    decrement_timer(sys->timers, beep);
+    decrement_timer(sys->timers, beep, sys->ms_per_cycle);
     get_input(sys);
 }
 

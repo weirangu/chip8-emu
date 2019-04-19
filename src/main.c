@@ -10,13 +10,16 @@
  -k, --key-hold-time\tThe number of cycles a key press is valid for\n\
  -d, --debug\t\tDisplays debugging information (such as register info)\n"
 
+#define DEFAULT_KEY_HOLD_TIME 100
+#define DEFAULT_SPEED 5
+
 WINDOW* curses_win; // The curses window for this program
 int debug = 0; // Determines whether we're in debug mode, defaults to 0
 
 int main(int argc, char* argv[]){
     // Parsing command line arguments
-    int speed = 5;
-    int key_hold_time = 150;
+    int speed = DEFAULT_SPEED;
+    int key_hold_time = DEFAULT_KEY_HOLD_TIME;
     int options_index = 0;
     int arg;
     char *strtol_endptr;
@@ -64,6 +67,7 @@ int main(int argc, char* argv[]){
         printf(ARG_INFO);
         return 1;
     }
+
     FILE* file = fopen(argv[optind], "rb");
     if (file == NULL) {
         // File was not open

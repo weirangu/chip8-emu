@@ -16,7 +16,7 @@ typedef struct chip8_sys {
     unsigned char graphics[SCREEN_WIDTH][SCREEN_HEIGHT];
     unsigned char input[0x10];
 
-    int cycle_time; // How long each cycle takes in ms
+    int ms_per_cycle; // How long each cycle takes in ms
     int key_hold_time; // How many cycles a keypress is held for once a keypress is detected
 
     // Debug vars
