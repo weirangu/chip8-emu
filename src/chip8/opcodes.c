@@ -198,15 +198,15 @@ void xD(unsigned char sig, unsigned char insig, chip8_sys* sys){
     unsigned short index = sys->reg->index;
 
     sys->reg->registers[0xF] = 0; // Detects collisions
-    for (int i = 0; i < n; i++) { // Loop through the heights
-        for (int j = x; j < x + 8; j++) { // Loop over the x values
-            unsigned char b = sys->mem[index + i] & 1 << (7 - ((j - x) % 8));
+    for (int i = y; i < y + n && i < 32; i++) { // Loop through the heights
+        for (int j = x; j < x + 8 && j < 64; j++) { // Loop over the x values
+            unsigned char b = sys->mem[index + i - y] & 1 << (7 - ((j - x) % 8));
             // Detect if a collision occurred
-            if ((sys->graphics[j / 8][y + i] & 1 << (7 - j % 8)) && b) {
+            if ((sys->graphics[j / 8][i] & 1 << (7 - j % 8)) && b) {
                 sys->reg->registers[0xF] = 1;
             }
             if (b) // if not b, we don't need to XOR
-                sys->graphics[j / 8][y + i] ^= 1 << (7 - j % 8);
+                sys->graphics[j / 8][i] ^= 1 << (7 - j % 8);
         }
     }
     increment_pc(sys->reg);
