@@ -31,9 +31,6 @@ unsigned char fonts[0x50];
 // WINDOW* curses is the curses window
 chip8_sys* init_sys(FILE* program, int speed, int key_hold_time);
 
-// Prints system memory to printw (needs curses). Does not call refresh.
-void print_sys_mem(chip8_sys* sys);
-
 // Runs the system
 void run(chip8_sys* sys);
 

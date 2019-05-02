@@ -62,12 +62,6 @@ unsigned char fonts[0x50] = {
     0xF0, 0x80, 0xF0, 0x80, 0x80
 };
 
-void print_sys_mem(chip8_sys* sys){
-    for (int i = 0; i < 4096; i++){
-        printw("%x ", sys->mem[i]);
-    }
-}
-
 void run(chip8_sys* sys){
     while (1) {
         cycle(sys);
