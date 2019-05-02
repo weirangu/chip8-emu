@@ -9,6 +9,8 @@
 #define SCREEN_WIDTH 8
 #define SCREEN_HEIGHT 32
 
+extern WINDOW* curses_win;
+
 typedef struct chip8_sys {
     unsigned char mem[4096];
     chip8_reg* reg;

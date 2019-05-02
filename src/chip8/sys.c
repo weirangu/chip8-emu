@@ -71,7 +71,6 @@ void run(chip8_sys* sys){
             print_sys_info(sys);
         }
 #ifdef _WIN32
-
         Sleep(sys->ms_per_cycle); // ~60Hz
 #endif
 #ifdef __linux__
@@ -158,9 +157,12 @@ void print_sys_info(chip8_sys* sys) {
     // Print I
     printw("I     %3x\n", sys->reg->index);
 
+    int maxy = getmaxy(curses_win); // Gets the maximum y coordinate of the screen
     // Prints opcode info
-    for (int i = 0; i < 64; i++) {
-        move(i, SCREEN_WIDTH * 8 + 1);
+    move(0, SCREEN_WIDTH * 8 + 6);
+    printw("OP\n");
+    for (int i = 1; i < ((maxy < 64) ? maxy : 64); i++) {
+        move(i, SCREEN_WIDTH * 8 + 6); // We want the opcodes to display to the right of the other info
         printw("%3x \n", sys->prev_ops[i]);
     }
     refresh();
