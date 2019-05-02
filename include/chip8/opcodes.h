@@ -3,6 +3,8 @@
 
 #include "chip8/sys.h"
 
+extern int hold_key;
+
 // A list of pointers that hold functions that process opcodes
 // sig is the significant byte, insig is the insignificant byte
 void (*ops[0x10])(unsigned char sig, unsigned char insig, chip8_sys *sys);

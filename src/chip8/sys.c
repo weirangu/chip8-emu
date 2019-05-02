@@ -12,7 +12,7 @@
 #include "chip8/timers.h"
 #include "chip8/opcodes.h"
 
-extern bool debug;
+extern int debug;
 
 chip8_sys* init_sys(FILE* program, int speed, int key_hold_time){
     chip8_sys* system = calloc(1, sizeof(chip8_sys));

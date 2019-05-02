@@ -220,6 +220,9 @@ void xE(unsigned char sig, unsigned char insig, chip8_sys* sys){
             // Skip next instruction if key is pressed
             if (sys->input[key]) {
                 sys->reg->pc += 0x02;
+                if (!hold_key) {
+                    sys->input[key] = 0;
+                }
             }
             break;
         // EXA1
@@ -227,6 +230,9 @@ void xE(unsigned char sig, unsigned char insig, chip8_sys* sys){
             // Skip next instruction if key isn't pressed
             if (!sys->input[key]) {
                 sys->reg->pc += 0x02;
+                if (!hold_key) {
+                    sys->input[key] = 0;
+                }
             }
             break;
         default:
