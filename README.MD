@@ -6,6 +6,10 @@ A CHIP-8 emulator written in C11.
 
 * PDCurses 3.4
 
+* SDL2
+
+* PkgConfig
+
 ## Building
 
 Generate a project through CMake, then build.
