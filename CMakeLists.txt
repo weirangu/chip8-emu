@@ -6,6 +6,7 @@ set(CMAKE_C_STANDARD 11)
 # source files
 list(APPEND SOURCES
     src/main.c
+    src/render.c
     src/chip8/sys.c
     src/chip8/reg.c
     src/chip8/timers.c

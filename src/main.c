@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <curses.h>
+#include <SDL2/SDL.h>
 #include <getopt.h>
+#include "render.h"
 #include "chip8/sys.h"
 
 #define ARG_INFO "Filename is required.\nAvailable optional arguments:\n\
@@ -19,7 +20,7 @@ WINDOW* curses_win; // The curses window for this program
 int debug = 0; // Determines whether we're in debug mode, defaults to 0
 int hold_key = 0; // Determines whether key should be reset to 0 when we run a EXXX that checks for that key
 
-int main(int argc, char* argv[]){
+int main(int argc, char* argv[]) {
     // Parsing command line arguments
     int speed = DEFAULT_SPEED;
     int key_hold_time = DEFAULT_KEY_HOLD_TIME;
@@ -81,18 +82,9 @@ int main(int argc, char* argv[]){
         perror("fopen");
         return 1;
     }
-
-    curses_win = initscr();
-    cbreak();
-    noecho();
-    curs_set(0); // Sets cursor to invis
-    nodelay(curses_win, TRUE);
-
+    init_sdl();
     run(init_sys(file, speed, key_hold_time));
-
-    // This point shouldn't be reached (as run has an endless loop)
-    endwin();
     fclose(file);
-
+    cleanup_sdl();
     return 0;
 }
