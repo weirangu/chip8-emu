@@ -19,24 +19,20 @@
  -h, --hold-key\t\tMakes a keypress last for the entire duration of the key hold time,\
  \n\t\t\trather than resetting when the state of the key is checked.\n"
 
-#define DEFAULT_KEY_HOLD_TIME 100
 #define DEFAULT_SPEED 5
 
-WINDOW* curses_win; // The curses window for this program
 int debug = 0; // Determines whether we're in debug mode, defaults to 0
 int hold_key = 0; // Determines whether key should be reset to 0 when we run a EXXX that checks for that key
 
 int main(int argc, char* argv[]) {
     // Parsing command line arguments
     int speed = DEFAULT_SPEED;
-    int key_hold_time = DEFAULT_KEY_HOLD_TIME;
     int options_index = 0;
     int arg;
     char* strtol_endptr;
     struct option options[] = {
             {"speed",         required_argument, NULL, 's'}, // The speed of each cycle (in ms)
             {"debug",         no_argument, &debug,     1}, // Also activated by -d, used to show register information
-            {"key-hold-time", required_argument, NULL, 'k'}, // Changes the key hold time (in cycles) for pressed keys
             {"hold-key",      no_argument, &hold_key,  1}, // Also activated by -h, when active key doesn't reset on EXXX opcodes
             {0,               0,           0,          0} // Null terminate this array
     };
@@ -48,14 +44,6 @@ int main(int argc, char* argv[]) {
                 break;
             case 's':
                 speed = strtol(optarg, &strtol_endptr, 10);
-                if (strtol_endptr == optarg) {
-                    // We never read in a number
-                    printf(ARG_INFO);
-                    return 1;
-                }
-                break;
-            case 'k':
-                key_hold_time = strtol(optarg, &strtol_endptr, 10);
                 if (strtol_endptr == optarg) {
                     // We never read in a number
                     printf(ARG_INFO);
@@ -91,13 +79,23 @@ int main(int argc, char* argv[]) {
     init_sdl();
 
     bool quit = FALSE;
-    chip8_sys* sys = init_sys(file, speed, key_hold_time);
+    chip8_sys* sys = init_sys(file, speed);
 
     while (!quit) {
         SDL_Event e;
         while (SDL_PollEvent(&e) != 0) {
-            if (e.type == SDL_QUIT) {
-                quit = TRUE;
+            switch (e.type) {
+                case SDL_QUIT:
+                    quit = TRUE;
+                    break;
+                case SDL_KEYDOWN:
+                    key_down(sys, e.key.keysym.sym);
+                    break;
+                case SDL_KEYUP:
+                    key_up(sys, e.key.keysym.sym);
+                    break;
+                default:
+                    break;
             }
         }
 

@@ -249,7 +249,16 @@ void xF(unsigned char sig, unsigned char insig, chip8_sys* sys){
             sys->reg->registers[x] = sys->timers->delay_timer;
             break;
         case 0x0A:
-            sys->reg->registers[x] = return_input_blocking(curses_win);
+            if (sys->blocking_for_key != -1) {
+                // Let the system know we're waiting for a keypress
+                sys->blocking_for_key = 1;
+                return; // We don't want to increment counter yet
+            }
+            else {
+                // Process keypress
+                sys->reg->registers[x] = sys->most_recent_key;
+                sys->blocking_for_key = 0;
+            }
             break;
         case 0x15:
             sys->timers->delay_timer = sys->reg->registers[x];

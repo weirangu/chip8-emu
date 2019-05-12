@@ -9,7 +9,7 @@
 
 extern int debug;
 
-chip8_sys* init_sys(FILE* program, int speed, int key_hold_time){
+chip8_sys* init_sys(FILE* program, int speed){
     chip8_sys* system = calloc(1, sizeof(chip8_sys));
     system->reg = calloc(1, sizeof(chip8_reg));
     system->timers = calloc(1, sizeof(chip8_timers));
@@ -18,7 +18,6 @@ chip8_sys* init_sys(FILE* program, int speed, int key_hold_time){
     init_timers(system->timers);
 
     system->ms_per_cycle = speed;
-    system->key_hold_time = key_hold_time;
 
     // Load fonts into memory
     for (int i = 0; i < 0x50; i++){
@@ -62,7 +61,6 @@ void cycle(chip8_sys* sys){
 
     // Runs opcode
     decrement_timer(sys->timers, beep, sys->ms_per_cycle);
-    get_input(sys);
 }
 
 void run_opcode(chip8_sys* sys) {
@@ -111,7 +109,7 @@ void print_sys_info(chip8_sys* sys) {
     // Print I
     printw("I     %3x\n", sys->reg->index);
 
-    int maxy = getmaxy(curses_win); // Gets the maximum y coordinate of the screen
+    int maxy = 0; //getmaxy(curses_win); // Gets the maximum y coordinate of the screen
     // Prints opcode info
     move(0, SCREEN_WIDTH * 8 + 6);
     printw("OP\n");
@@ -122,60 +120,58 @@ void print_sys_info(chip8_sys* sys) {
     refresh();
 }
 
-void get_input(chip8_sys* sys) {
-    for (unsigned char i = 0; i < 0x10; i++) {
-        if (sys->input[i]) {
-            // Lower keys by 1
-            sys->input[i] -= 1;
+void key_down(chip8_sys* sys, SDL_Keycode keycode) {
+    int key_mapping = map_key(keycode);
+    if (key_mapping >= 0) {
+        sys->input[key_mapping] = TRUE;
+        sys->most_recent_key = key_mapping;
+        if (sys->blocking_for_key) {
+            // Tells sys that it should process this key
+            sys->blocking_for_key = -1;
         }
     }
+}
 
-    int key;
-    while ((key = getch()) != ERR){
-        sys->input[map_key(key)] =sys->key_hold_time;
+void key_up(chip8_sys* sys, SDL_Keycode keycode) {
+    int key_mapping = map_key(keycode);
+    if (key_mapping >= 0) {
+        sys->input[key_mapping] = FALSE;
     }
 }
 
-int return_input_blocking(WINDOW* win) {
-    nodelay(win, FALSE);
-    int key = getch();
-    nodelay(win, TRUE);
-    return map_key(key);
-}
-
-int map_key(int key) {
+int map_key(SDL_Keycode key) {
     switch (key) {
-        case '1':
+        case SDLK_1:
             return 0x1;
-        case '2':
+        case SDLK_2:
             return 0x2;
-        case '3':
+        case SDLK_3:
             return 0x3;
-        case '4':
+        case SDLK_4:
             return 0xC;
-        case 'q':
+        case SDLK_q:
             return 0x4;
-        case 'w':
+        case SDLK_w:
             return 0x5;
-        case 'e':
+        case SDLK_e:
             return 0x6;
-        case 'r':
+        case SDLK_r:
             return 0xD;
-        case 'a':
+        case SDLK_a:
             return 0x7;
-        case 's':
+        case SDLK_s:
             return 0x8;
-        case 'd':
+        case SDLK_d:
             return 0x9;
-        case 'f':
+        case SDLK_f:
             return 0xE;
-        case 'z':
+        case SDLK_z:
             return 0xA;
-        case 'x':
+        case SDLK_x:
             return 0x0;
-        case 'c':
+        case SDLK_c:
             return 0xB;
-        case 'v':
+        case SDLK_v:
             return 0xF;
     }
     return -0x1;
