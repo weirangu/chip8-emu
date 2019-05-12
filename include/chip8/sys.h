@@ -41,9 +41,6 @@ void cycle(chip8_sys* sys);
 
 void run_opcode(chip8_sys* sys);
 
-// Prints graphics to the screen (assuming initscr() was called)
-void print(unsigned char graphics[SCREEN_WIDTH][SCREEN_HEIGHT]);
-
 // Prints system info at the sides of the screen (assuming initscr() was called)
 void print_sys_info(chip8_sys* sys);
 

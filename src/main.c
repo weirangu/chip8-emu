@@ -1,6 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#ifdef _WIN32
+#include <windows.h>
+#endif
+#ifdef __linux__
+#include <unistd.h>
+#endif
 #include <SDL2/SDL.h>
 #include <getopt.h>
 #include "render.h"
@@ -26,13 +32,13 @@ int main(int argc, char* argv[]) {
     int key_hold_time = DEFAULT_KEY_HOLD_TIME;
     int options_index = 0;
     int arg;
-    char *strtol_endptr;
+    char* strtol_endptr;
     struct option options[] = {
-            {"speed", required_argument, NULL, 's'}, // The speed of each cycle (in ms)
-            {"debug", no_argument, &debug, 1}, // Also activated by -d, used to show register information
+            {"speed",         required_argument, NULL, 's'}, // The speed of each cycle (in ms)
+            {"debug",         no_argument, &debug,     1}, // Also activated by -d, used to show register information
             {"key-hold-time", required_argument, NULL, 'k'}, // Changes the key hold time (in cycles) for pressed keys
-            {"hold-key", no_argument, &hold_key, 1}, // Also activated by -h, when active key doesn't reset on EXXX opcodes
-            {0, 0, 0, 0} // Null terminate this array
+            {"hold-key",      no_argument, &hold_key,  1}, // Also activated by -h, when active key doesn't reset on EXXX opcodes
+            {0,               0,           0,          0} // Null terminate this array
     };
 
     while ((arg = getopt_long(argc, argv, "s:dk:h", options, &options_index)) != -1) {
@@ -83,7 +89,30 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     init_sdl();
-    run(init_sys(file, speed, key_hold_time));
+
+    bool quit = FALSE;
+    chip8_sys* sys = init_sys(file, speed, key_hold_time);
+
+    while (!quit) {
+        SDL_Event e;
+        while (SDL_PollEvent(&e) != 0) {
+            if (e.type == SDL_QUIT) {
+                quit = TRUE;
+            }
+        }
+
+        // Run a cycle and print
+        cycle(sys);
+        print_screen(sys->graphics);
+
+        // Wait for next cycle
+#ifdef _WIN32
+        Sleep(speed);
+#endif
+#ifdef __linux__
+        usleep(1000 * speed);
+#endif
+    }
     fclose(file);
     cleanup_sdl();
     return 0;

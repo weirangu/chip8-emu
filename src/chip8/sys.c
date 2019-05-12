@@ -1,12 +1,7 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <curses.h>
-#ifdef _WIN32
-#include <windows.h>
-#endif
-#ifdef __linux__
-#include <unistd.h>
-#endif
+#include "render.h"
 #include "chip8/sys.h"
 #include "chip8/reg.h"
 #include "chip8/timers.h"
@@ -62,23 +57,6 @@ unsigned char fonts[0x50] = {
     0xF0, 0x80, 0xF0, 0x80, 0x80
 };
 
-void run(chip8_sys* sys){
-    while (1) {
-        cycle(sys);
-
-        print(sys->graphics);
-        if (debug) {
-            print_sys_info(sys);
-        }
-#ifdef _WIN32
-        Sleep(sys->ms_per_cycle);
-#endif
-#ifdef __linux__
-        usleep(1000 * sys->ms_per_cycle);
-#endif
-    }
-}
-
 void cycle(chip8_sys* sys){
     run_opcode(sys);
 
@@ -97,30 +75,6 @@ void run_opcode(chip8_sys* sys) {
         sys->prev_ops[i + 1] = sys->prev_ops[i];
     }
     sys->prev_ops[0] = (opcode_sig << 8) | opcode_insig;
-}
-
-void print(unsigned char graphics[SCREEN_WIDTH][SCREEN_HEIGHT]) {
-    move(0, 0);
-
-    for (int i = 0; i < SCREEN_HEIGHT; i++) {
-        for (int j = 0; j < SCREEN_WIDTH; j++) {
-            for (int k = 0x80; k > 0x00; k >>= 1){
-                // We see the value of each bit and draw if its a 1
-                int bit = graphics[j][i] & k;
-                if (bit) {
-                    addch(ACS_BLOCK);
-                }
-                else {
-                    addch(' ');
-                }
-                if (k == 0x00)
-                    break; // If we keep right shifting, we stay at 0
-            }
-        }
-        addch('\n');
-    }
-
-    refresh();
 }
 
 void print_sys_info(chip8_sys* sys) {
