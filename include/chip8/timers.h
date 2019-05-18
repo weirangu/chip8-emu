@@ -6,14 +6,15 @@
 typedef struct chip8_timers {
     unsigned char delay_timer;
     unsigned char sound_timer;
-
-    unsigned int next_decrement; // This timer keeps track of the next time the timers are to decrement
 } chip8_timers;
 
 // Initializes timers. Assumes timer has been calloced.
 void init_timers(chip8_timers* timer);
 
-// Decrements timers. If sound timer reaches 0, sound() is called.
-void decrement_timer(chip8_timers* timer, int (* sound)(void), unsigned int elapsed_time);
+// Decrements timers (through SDL Timers). If sound timer reaches 0, a beep is made.
+Uint32 decrement_timer(Uint32 interval, void* chip8_sys);
+
+// Makes a beep
+void beep(void);
 
 #endif

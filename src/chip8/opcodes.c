@@ -1,9 +1,6 @@
-#include <curses.h>
 #include <stdlib.h>
 #include "chip8/sys.h"
 #include "chip8/opcodes.h"
-
-extern WINDOW* curses_win;
 
 void (* ops[0x10])(unsigned char sig, unsigned char insig, chip8_sys* sys) = {
         x0, // 0x0
@@ -44,7 +41,7 @@ void x0(unsigned char sig, unsigned char insig, chip8_sys* sys){
     }
     else {
         // 0NNN
-        printw("0NNN Not implemented!");
+        fprintf(stderr, "0NNN opcode not implemented!\n");
     }
 }
 
@@ -151,6 +148,9 @@ void x8(unsigned char sig, unsigned char insig, chip8_sys* sys){
             reg[0xF] = (reg[x] & 0x80) >> 7;
             reg[x] <<= 1;
             break;
+        default:
+            fprintf(stderr, "Opcode not recognized!\n");
+            break;
     }
     increment_pc(sys->reg);
 }
@@ -220,9 +220,6 @@ void xE(unsigned char sig, unsigned char insig, chip8_sys* sys){
             // Skip next instruction if key is pressed
             if (sys->input[key]) {
                 sys->reg->pc += 0x02;
-                if (!hold_key) {
-                    sys->input[key] = 0;
-                }
             }
             break;
         // EXA1
@@ -230,9 +227,6 @@ void xE(unsigned char sig, unsigned char insig, chip8_sys* sys){
             // Skip next instruction if key isn't pressed
             if (!sys->input[key]) {
                 sys->reg->pc += 0x02;
-                if (!hold_key) {
-                    sys->input[key] = 0;
-                }
             }
             break;
         default:
@@ -286,6 +280,9 @@ void xF(unsigned char sig, unsigned char insig, chip8_sys* sys){
             for (unsigned short i = 0; i <= x; i++) {
                 sys->reg->registers[i] = sys->mem[sys->reg->index + i];
             }
+            break;
+        default:
+            fprintf(stderr, "Opcode not recognized!\n");
             break;
     }
     increment_pc(sys->reg);

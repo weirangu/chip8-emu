@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <getopt.h>
 #ifdef _WIN32
 #include <windows.h>
 #endif
@@ -8,8 +9,8 @@
 #include <unistd.h>
 #endif
 #include <SDL2/SDL.h>
-#include <getopt.h>
-#include "render.h"
+#include <SDL2/SDL_audio.h>
+#include "sdl.h"
 #include "chip8/sys.h"
 
 #define ARG_INFO "Filename is required.\nAvailable optional arguments:\n\
@@ -21,9 +22,6 @@
 
 #define DEFAULT_SPEED 5
 
-int debug = 0; // Determines whether we're in debug mode, defaults to 0
-int hold_key = 0; // Determines whether key should be reset to 0 when we run a EXXX that checks for that key
-
 int main(int argc, char* argv[]) {
     // Parsing command line arguments
     int speed = DEFAULT_SPEED;
@@ -31,10 +29,8 @@ int main(int argc, char* argv[]) {
     int arg;
     char* strtol_endptr;
     struct option options[] = {
-            {"speed",         required_argument, NULL, 's'}, // The speed of each cycle (in ms)
-            {"debug",         no_argument, &debug,     1}, // Also activated by -d, used to show register information
-            {"hold-key",      no_argument, &hold_key,  1}, // Also activated by -h, when active key doesn't reset on EXXX opcodes
-            {0,               0,           0,          0} // Null terminate this array
+            {"speed", required_argument, NULL, 's'}, // The speed of each cycle (in ms)
+            {0, 0, 0, 0} // Null terminate this array
     };
 
     while ((arg = getopt_long(argc, argv, "s:dk:h", options, &options_index)) != -1) {
@@ -49,12 +45,6 @@ int main(int argc, char* argv[]) {
                     printf(ARG_INFO);
                     return 1;
                 }
-                break;
-            case 'd':
-                debug = 1;
-                break;
-            case 'h':
-                hold_key = 1;
                 break;
             default:
                 // An invalid argument was provided
@@ -78,8 +68,8 @@ int main(int argc, char* argv[]) {
     }
     init_sdl();
 
-    bool quit = FALSE;
-    chip8_sys* sys = init_sys(file, speed);
+    int quit = FALSE;
+    chip8_sys* sys = init_sys(file);
 
     while (!quit) {
         SDL_Event e;

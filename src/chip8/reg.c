@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "chip8/reg.h"
 
 void init_reg(chip8_reg* reg){
