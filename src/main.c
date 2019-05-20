@@ -14,13 +14,9 @@
 #include "chip8/sys.h"
 
 #define ARG_INFO "Filename is required.\nAvailable optional arguments:\n\
- -s, --speed\t\tThe number of milliseconds per cycle\n\
- -k, --key-hold-time\tThe number of cycles a key press is valid for.\n\
- -d, --debug\t\tDisplays debugging information (such as register info)\n\
- -h, --hold-key\t\tMakes a keypress last for the entire duration of the key hold time,\
- \n\t\t\trather than resetting when the state of the key is checked.\n"
+ -s, --speed\t\tThe number of milliseconds per cycle.\n"
 
-#define DEFAULT_SPEED 5
+#define DEFAULT_SPEED 1
 
 int main(int argc, char* argv[]) {
     // Parsing command line arguments
@@ -29,8 +25,8 @@ int main(int argc, char* argv[]) {
     int arg;
     char* strtol_endptr;
     struct option options[] = {
-            {"speed", required_argument, NULL, 's'}, // The speed of each cycle (in ms)
-            {0, 0, 0, 0} // Null terminate this array
+        {"speed", required_argument, NULL, 's'}, // The speed of each cycle (in ms)
+        {0, 0, 0, 0} // Null terminate this array
     };
 
     while ((arg = getopt_long(argc, argv, "s:dk:h", options, &options_index)) != -1) {

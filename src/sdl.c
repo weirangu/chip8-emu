@@ -20,11 +20,12 @@ void init_sdl(void) {
         fprintf(stderr, "SDL_Init failed: %s\n", SDL_GetError());
         exit(1);
     }
-    SDL_CreateWindowAndRenderer(800, 400, SDL_WINDOW_SHOWN, &sdl_win, &sdl_ren);
+    SDL_CreateWindowAndRenderer(640, 320, SDL_WINDOW_RESIZABLE, &sdl_win, &sdl_ren);
     if (sdl_win == NULL || sdl_ren == NULL) {
         fprintf(stderr, "SDL_CreateWindowAndRenderer failed: %s\n", SDL_GetError());
         exit(1);
     }
+    SDL_SetWindowTitle(sdl_win, "chip8-emu");
 
     // Initialize beep tone
     if ((beep_rw = SDL_RWFromConstMem(beep_wav_data, beep_wav_len)) == NULL) {
@@ -65,15 +66,20 @@ void print_screen(unsigned char graphics[SCREEN_WIDTH][SCREEN_HEIGHT]) {
     SDL_Surface* surface = SDL_GetWindowSurface(sdl_win);
     Uint32 white = SDL_MapRGB(surface->format, 255, 255, 255);
     Uint32 black = SDL_MapRGB(surface->format, 0, 0, 0);
-    SDL_Rect rect = {.h = 10, .w = 10};
+    int w; // Window width
+    int h; // Window height
+    SDL_GetWindowSize(sdl_win, &w, &h);
+
+    int d = w/64 < h/32 ? w/64 : h/32; // d is the dimensions of the square pixels
+    SDL_Rect rect = {.h = d, .w = d};
 
     for (int i = 0; i < SCREEN_HEIGHT; i++) {
         for (int j = 0; j < SCREEN_WIDTH; j++) {
             for (int k = 7; k >= 0; k--) {
                 // We see the value of each bit and draw if its a 1
                 int bit = graphics[j][i] & 1 << k;
-                rect.x = (j * 8 + (7 - k)) * 10;
-                rect.y = i * 10;
+                rect.x = (j * 8 + (7 - k)) * d;
+                rect.y = i * d;
 
                 if (bit) {
                     SDL_FillRect(surface, &rect, white);
