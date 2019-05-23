@@ -28,11 +28,12 @@ void init_sdl(void) {
     SDL_SetWindowTitle(sdl_win, "chip8-emu");
 
     // Initialize beep tone
-    if ((beep_rw = SDL_RWFromConstMem(beep_wav_data, beep_wav_len)) == NULL) {
+    if ((beep_rw = SDL_RWFromMem(beep_wav_data, beep_wav_len)) == NULL) {
         fprintf(stderr, "SDL_RWFromConstMem failed: %s\n", SDL_GetError());
         exit(1);
     }
 
+    // Note: LoadWAV_RW frees beep_fw
     if (SDL_LoadWAV_RW(beep_rw, 1, &beep_wav, &beep_buffer, &beep_length) == NULL) {
         fprintf(stderr, "SDL_LoadWAV_RW failed: %s\n", SDL_GetError());
         exit(1);
@@ -45,13 +46,11 @@ void init_sdl(void) {
 }
 void cleanup_sdl(void) {
     if (audio_dev != 0) {
+        SDL_PauseAudioDevice(audio_dev, 1);
         SDL_CloseAudioDevice(audio_dev);
     }
     if (beep_buffer != NULL) {
         SDL_FreeWAV(beep_buffer);
-    }
-    if (beep_rw != NULL) {
-        SDL_RWclose(beep_rw);
     }
     if (sdl_ren != NULL) {
         SDL_DestroyRenderer(sdl_ren);

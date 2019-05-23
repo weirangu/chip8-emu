@@ -64,7 +64,7 @@ int main(int argc, char* argv[]) {
     }
     init_sdl();
 
-    int quit = FALSE;
+    int quit = 0;
     chip8_sys* sys = init_sys(file);
 
     while (!quit) {
@@ -72,7 +72,7 @@ int main(int argc, char* argv[]) {
         while (SDL_PollEvent(&e) != 0) {
             switch (e.type) {
                 case SDL_QUIT:
-                    quit = TRUE;
+                    quit = 1;
                     break;
                 case SDL_KEYDOWN:
                     key_down(sys, e.key.keysym.sym);
